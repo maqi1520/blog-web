@@ -1,0 +1,26 @@
+# f.yml document https://www.yuque.com/midwayjs/faas/serverless_yml
+
+service: midway-faas-react-demo
+
+provider:
+  name: aliyun # tencent
+  runtime: nodejs10
+
+functions:
+  render:
+    handler: api.render
+    events:
+      - http:
+          path: /*
+
+## aggregation deplpy
+aggregation:
+  agg-demo-all:
+    deployOrigin: false
+    functionsPattern:
+      - '*'
+
+package:
+  include:
+    - build
+  artifact: code.zip
