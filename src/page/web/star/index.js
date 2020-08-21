@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import api from '../../../common/api'
-import { List } from 'antd'
+import { List, Spin } from 'antd'
 import './index.less'
 
 class Collect extends Component {
@@ -8,6 +8,7 @@ class Collect extends Component {
     super(props)
     this.state = {
       data: [],
+      loading: false,
       pageNo: 1,
       pageSize: 10,
       total: 0,
@@ -16,17 +17,27 @@ class Collect extends Component {
   componentDidMount() {
     this.getList()
   }
+
+  setLoading = (loading) => {
+    this.setState({ loading })
+  }
   async getList() {
-    const params = {
-      title: '',
-      pageNo: this.state.pageNo,
-      pageSize: this.state.pageSize,
+    this.setLoading(true)
+    try {
+      const params = {
+        title: '',
+        pageNo: this.state.pageNo,
+        pageSize: this.state.pageSize,
+      }
+      const { data = [], total = 0 } = await api.get('star/list', params)
+      this.setState({
+        data,
+        total,
+        loading: false,
+      })
+    } catch (error) {
+      this.setLoading(false)
     }
-    const { data = [], total = 0 } = await api.get('star/list', params)
-    this.setState({
-      data,
-      total,
-    })
   }
   render() {
     const pagination = {
@@ -41,7 +52,7 @@ class Collect extends Component {
       // })
     }
     return (
-      <div>
+      <Spin type="default" spinning={this.state.loading}>
         <List
           className="star-list"
           header={<div className="star-header">文章收藏</div>}
@@ -65,7 +76,7 @@ class Collect extends Component {
             </List.Item>
           )}
         />
-      </div>
+      </Spin>
     )
   }
 }

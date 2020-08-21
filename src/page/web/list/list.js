@@ -2,8 +2,15 @@ import React, { Component } from 'react'
 import { color } from '../../../utils'
 import api from '../../../common/api'
 
-import { List, Icon, Tag } from 'antd'
+import { List, Icon, Tag, Spin } from 'antd'
 import './list.less'
+
+const IconText = ({ type, text }) => (
+  <span>
+    <Icon type={type} style={{ marginRight: 8 }} />
+    {text}
+  </span>
+)
 
 class BlogList extends Component {
   constructor(props) {
@@ -19,13 +26,17 @@ class BlogList extends Component {
   }
   async getList() {
     this.setState({ loading: true })
-    const params = {
-      pageNo: this.state.pageNo,
-      pageSize: this.state.pageSize,
-    }
-    const { data, code, total } = await api.get('/article/list', params)
-    if (code === 1000) {
-      this.setState({ data, total })
+    try {
+      const params = {
+        pageNo: this.state.pageNo,
+        pageSize: this.state.pageSize,
+      }
+      const { data, code, total } = await api.get('/article/list', params)
+      if (code === 1000) {
+        this.setState({ data, total, loading: false })
+      }
+    } catch (error) {
+      this.setState({ loading: false })
     }
   }
   render() {
@@ -40,60 +51,55 @@ class BlogList extends Component {
       },
     }
 
-    const IconText = ({ type, text }) => (
-      <span>
-        <Icon type={type} style={{ marginRight: 8 }} />
-        {text}
-      </span>
-    )
-
     return (
       <div className="list-wrapper">
-        <List
-          itemLayout="vertical"
-          size="large"
-          pagination={this.state.data.length ? pagination : null}
-          dataSource={this.state.data}
-          renderItem={(item, index) => (
-            <List.Item
-              key={index}
-              actions={[
-                <IconText
-                  type="tags-o"
-                  text={item.tag.map((v) => (
-                    <Tag
-                      key={item + Math.random()}
-                      color={color[Math.floor(Math.random() * color.length)]}
-                    >
-                      {v}
-                    </Tag>
-                  ))}
-                />,
-                item.category ? (
+        <Spin type="default" spinning={this.state.loading}>
+          <List
+            itemLayout="vertical"
+            size="large"
+            pagination={this.state.data.length ? pagination : null}
+            dataSource={this.state.data}
+            renderItem={(item, index) => (
+              <List.Item
+                key={index}
+                actions={[
                   <IconText
-                    type="folder"
-                    text={item.category.map((v) => (
-                      <Tag key={item + Math.random()} color="green">
+                    type="tags-o"
+                    text={item.tag.map((v) => (
+                      <Tag
+                        key={item + Math.random()}
+                        color={color[Math.floor(Math.random() * color.length)]}
+                      >
                         {v}
                       </Tag>
                     ))}
-                  />
-                ) : null,
-                <IconText type="calendar" text={item.createdAt} />,
-                <IconText type="eye" text={`${item.readedCount} 次预览`} />,
-              ]}
-            >
-              <List.Item.Meta
-                // className="list-item"
-                title={item.title}
-                description={item.summary}
-                onClick={() =>
-                  this.props.history.push(`/web/detail/${item.id}`)
-                }
-              />
-            </List.Item>
-          )}
-        />
+                  />,
+                  item.category ? (
+                    <IconText
+                      type="folder"
+                      text={item.category.map((v) => (
+                        <Tag key={item + Math.random()} color="green">
+                          {v}
+                        </Tag>
+                      ))}
+                    />
+                  ) : null,
+                  <IconText type="calendar" text={item.createdAt} />,
+                  <IconText type="eye" text={`${item.readedCount} 次预览`} />,
+                ]}
+              >
+                <List.Item.Meta
+                  // className="list-item"
+                  title={item.title}
+                  description={item.summary}
+                  onClick={() =>
+                    this.props.history.push(`/web/detail/${item.id}`)
+                  }
+                />
+              </List.Item>
+            )}
+          />
+        </Spin>
       </div>
     )
   }
