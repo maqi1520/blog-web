@@ -1,0 +1,86 @@
+.create-page {
+  background-color: #f0f2f5;
+}
+.create-header {
+  position: relative;
+  height: 56px;
+  padding: 12px 12px 12px 0;
+  background: #fff;
+  border-bottom: 1px solid #e8e8e8;
+  z-index: 999;
+  display: flex;
+  flex-direction: row;
+  .back-btn {
+    line-height: 32px;
+    height: 32px;
+    width: 100px;
+    text-align: center;
+  }
+  .input-box {
+    flex: 1;
+  }
+  .header-action {
+    text-align: right;
+    width: 190px;
+  }
+}
+.create-body {
+  padding-bottom: 16px;
+}
+.toolbar {
+  position: relative;
+  width: 100%;
+  height: 40px;
+  padding: 0;
+  line-height: 1.5;
+  background: #fcfcfc;
+  border-bottom: 1px solid #e8e8e8;
+  transition: all 0.25s cubic-bezier(0.3, 1.2, 0.2, 1);
+  z-index: 200;
+  user-select: none;
+  .toolbar-inner {
+    width: 1280px;
+    margin: 0 auto;
+    padding-top: 4px;
+  }
+}
+.create-content {
+  padding: 32px 60px;
+  border: 1px solid #e8e8e8;
+  box-shadow: 0 2px 8px rgba(115, 115, 115, 0.08);
+  position: relative;
+  margin: 12px auto;
+  background: #ffffff;
+  width: 1280px;
+  min-height: 800px;
+  font-size: 14px;
+  color: #262626;
+  cursor: text;
+  white-space: normal;
+}
+.markdown-editor {
+  height: 100%;
+  min-height: 100%;
+  .CodeMirror {
+    font-family: inherit;
+    height: 100%;
+    min-height: 100%;
+  }
+}
+.lake-button {
+  display: inline-block;
+  height: 32px;
+  width: auto;
+  min-width: 32px;
+  margin: 0;
+  text-align: center;
+  padding: 0 7px;
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 3px 3px;
+  font-size: 16px;
+  cursor: pointer;
+  color: #595959;
+  outline: none;
+  line-height: 32px;
+}
