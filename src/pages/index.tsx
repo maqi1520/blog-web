@@ -119,7 +119,7 @@ export default function ListPage({
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { pageNum = '1' } = ctx.query
   const articleData = await getArticles({
-    pageNum: pageNum.toString(),
+    pageNum: pageNum as string,
     pageSize: '10',
   })
   return {

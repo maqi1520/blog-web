@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios'
 
 const request = axios.create({
-  baseURL: process.env.API_URL + '/api',
+  baseURL: process.env.API_URL || '' + '/api',
   headers: {
     'Content-Type': 'application/json; charset=utf-8',
   },
@@ -46,5 +46,11 @@ export const getArticles = <T>(params?: {
 }) => {
   return axios
     .get<T>(process.env.API_URL + '/api/articles', { params })
+    .then((res) => res.data)
+}
+
+export const getArticle = <T>(id: string) => {
+  return axios
+    .get<T>(process.env.API_URL + `/api/articles/${id}`)
     .then((res) => res.data)
 }

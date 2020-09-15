@@ -22,11 +22,12 @@ import api from '@/common/api'
 import IconButton from '@/components/IconButton'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
+import { markdownToHtml } from '@/common/markdown'
 
 const Codemirror = dynamic(() => import('@/components/codemirror'), {
   ssr: false,
 })
-const Markdown = dynamic(() => import('@/components/markdown'), { ssr: false })
+//const Markdown = dynamic(() => import('@/components/markdown'), { ssr: false })
 
 // 插入内容
 const HEADING = (t: string) => `## ${t || '标题'}`
@@ -245,7 +246,9 @@ export default function Create(): ReactElement {
               onChange={setValue}
             />
           ) : (
-            <Markdown source={value} />
+            <div
+              dangerouslySetInnerHTML={{ __html: markdownToHtml(value) }}
+            ></div>
           )}
         </div>
       </div>

@@ -1,20 +1,18 @@
 import React, { ReactElement } from 'react'
-import { Card, Spin } from 'antd'
-import useRequest from '@/common/useRequest'
-import Markdown from '@/components/markdown'
+import { Card, Row, Col, Affix } from 'antd'
+import { markdownToHtml, markdownToToc } from '@/common/markdown'
 import { IArticle } from '@/types'
-
 import { CalendarOutlined, EyeOutlined } from '@ant-design/icons'
-import { useRouter } from 'next/router'
+import { getArticle } from '@/common/api'
+import { GetServerSideProps } from 'next'
+import Head from 'next/head'
+import { BLOG_NAME } from '@/common/config'
 
-export default function ArticleDetail(): ReactElement {
-  const { query } = useRouter()
-  const { id } = query
-
-  const { data, loading } = useRequest<IArticle>({
-    url: `/article/${id}`,
-  })
-
+export default function ArticleDetail({
+  data,
+}: {
+  data: IArticle
+}): ReactElement {
   const extra = (
     <div className="content-extra">
       <CalendarOutlined style={{ marginRight: 8 }} />
@@ -25,10 +23,38 @@ export default function ArticleDetail(): ReactElement {
   )
 
   return (
-    <Spin spinning={loading}>
-      <Card title={data?.title} extra={extra}>
-        <Markdown source={data?.content || ''} />
-      </Card>
-    </Spin>
+    <Row gutter={16}>
+      <Head>
+        <title>
+          {data.tag}-{BLOG_NAME}
+        </title>
+      </Head>
+      <Col span={18}>
+        <Card title={data?.title} extra={extra}>
+          <div
+            dangerouslySetInnerHTML={{ __html: markdownToHtml(data.content) }}
+          ></div>
+        </Card>
+      </Col>
+
+      <Col span={6}>
+        <Affix offsetTop={20}>
+          <div>目录</div>
+          <div
+            dangerouslySetInnerHTML={{ __html: markdownToToc(data.content) }}
+          ></div>
+        </Affix>
+      </Col>
+    </Row>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { id } = ctx.query
+  const data = await getArticle(id as string)
+  return {
+    props: {
+      data,
+    },
+  }
 }
