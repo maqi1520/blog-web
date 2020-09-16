@@ -23,6 +23,7 @@ import IconButton from '@/components/IconButton'
 import Auth from '@/components/layout/Auth'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
+import Link from 'next/link'
 import { markdownToHtml } from '@/common/markdown'
 
 const Codemirror = dynamic(() => import('@/components/codemirror'), {
@@ -123,7 +124,9 @@ export default function Create(): ReactElement {
       <div className="create-page">
         <div className="create-header">
           <div className="back-btn">
-            <LeftOutlined style={{ fontSize: 18 }} />
+            <Link href="/">
+              <LeftOutlined style={{ fontSize: 18 }} />
+            </Link>
           </div>
           <div className="input-box">
             <Input

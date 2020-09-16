@@ -39,10 +39,12 @@ export default function ArticleDetail({
 
       <Col span={6}>
         <Affix offsetTop={20}>
-          <div>目录</div>
-          <div
-            dangerouslySetInnerHTML={{ __html: markdownToToc(data.content) }}
-          ></div>
+          <div>
+            <div>目录</div>
+            <div
+              dangerouslySetInnerHTML={{ __html: markdownToToc(data.content) }}
+            ></div>
+          </div>
         </Affix>
       </Col>
     </Row>

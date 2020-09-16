@@ -2,42 +2,39 @@ import React, {
   ReactElement,
   createContext,
   useState,
-  useEffect,
   useMemo,
   useCallback,
 } from 'react'
 import { getUserInfo } from '@/common/api'
+import { IUser } from '@/types/base'
 
 interface Props {
+  user: IUser
   children: ReactElement
-}
-
-interface Iuser {
-  id: string
 }
 
 interface Action {
   getUser: () => void
 }
-export type IContext = [{ user: Iuser | null }, Action]
+export type IContext = [{ user: IUser | null }, Action]
 
 export const Context = createContext<IContext | null>(null)
 
-export default function LayoutProvider({ children }: Props): ReactElement {
-  const [state, setstate] = useState<{ user: Iuser | null }>({
-    user: null,
+export default function LayoutProvider({
+  children,
+  user,
+}: Props): ReactElement {
+  const [state, setstate] = useState<{ user: IUser | null }>({
+    user,
   })
   const getUser = useCallback(() => {
     if (window.sessionStorage.getItem('token')) {
-      getUserInfo<Iuser>()
+      getUserInfo<IUser>()
         .then((res) => {
           setstate({ user: res })
         })
         .catch(() => {})
     }
-  }, [])
-  useEffect(() => {
-    getUser()
   }, [])
   const action = useMemo(
     () => ({
