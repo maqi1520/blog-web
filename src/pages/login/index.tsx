@@ -1,10 +1,13 @@
 import { Form, Input, Button, Card, message } from 'antd'
 import { LockOutlined, MailOutlined } from '@ant-design/icons'
 import { login } from '@/common/api'
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useContext } from 'react'
 import { useRouter } from 'next/router'
 
+import { Context, IContext } from '@/components/layout/LayoutProvider'
+
 export default function LoginPage(): ReactElement {
+  const [, action] = useContext(Context) as IContext
   const router = useRouter()
   const [form] = Form.useForm()
 
@@ -14,6 +17,7 @@ export default function LoginPage(): ReactElement {
       const { token } = res
       if (token) {
         sessionStorage.setItem('token', token)
+        action.getUser()
         router.push('/')
       }
     } catch (err) {

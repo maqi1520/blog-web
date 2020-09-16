@@ -20,6 +20,7 @@ import {
 } from '@ant-design/icons'
 import api from '@/common/api'
 import IconButton from '@/components/IconButton'
+import Auth from '@/components/layout/Auth'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
 import { markdownToHtml } from '@/common/markdown'
@@ -118,140 +119,142 @@ export default function Create(): ReactElement {
   }, [router, title, value])
 
   return (
-    <div className="create-page">
-      <div className="create-header">
-        <div className="back-btn">
-          <LeftOutlined style={{ fontSize: 18 }} />
-        </div>
-        <div className="input-box">
-          <Input
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="请输入标题"
-          />
-        </div>
-        <div className="header-action">
-          <Button
-            style={{ marginRight: 20 }}
-            onClick={() => setEditable(!editable)}
-            type="default"
-          >
-            预览
-          </Button>
-          <Button
-            onClick={handleSave}
-            style={{ marginRight: 20 }}
-            type="primary"
-          >
-            发布
-          </Button>
-        </div>
-      </div>
-      <div className="create-body">
-        <div className="toolbar">
-          <div className="toolbar-inner">
-            <IconButton
-              title="撤销"
-              style={{ transform: 'rotate(90deg)' }}
-              icon={<UndoOutlined />}
-              onClick={handleUndo}
-            />
-            <IconButton
-              title="重做"
-              style={{ transform: 'rotate(-90deg)' }}
-              icon={<RedoOutlined />}
-              onClick={handleRedo}
-            />
-            <Divider type="vertical" />
-            <IconButton
-              title="标题"
-              icon={<FontSizeOutlined />}
-              onClick={insertHeading}
-            />
-            <Divider type="vertical" />
-            <IconButton
-              title="粗体"
-              icon={<BoldOutlined />}
-              onClick={insertBold}
-            />
-            <IconButton
-              title="斜体"
-              icon={<ItalicOutlined />}
-              onClick={insertItalic}
-            />
-            <IconButton
-              title="删除线"
-              icon={<StrikethroughOutlined />}
-              onClick={insertStrikethrough}
-            />
-            <Divider type="vertical" />
-            <IconButton
-              title="无序列表"
-              icon={<BarsOutlined />}
-              onClick={insertUnorderedList}
-            />
-            <IconButton
-              title="有序列表"
-              icon={<OrderedListOutlined />}
-              onClick={insertOrderedList}
-            />
-            <IconButton
-              title="可选列表"
-              icon={<CheckSquareOutlined />}
-              style={{ padding: '0 8px' }}
-              onClick={insertCheckList}
-            />
-            <Divider type="vertical" />
-            <IconButton
-              title="引用"
-              icon={<DoubleRightOutlined />}
-              style={{ padding: '0 8px' }}
-              onClick={insertQuote}
-            />
-            <IconButton
-              title="表格"
-              icon={<TableOutlined />}
-              onClick={insertTable}
-            />
-            <IconButton
-              title="代码"
-              icon={<RetweetOutlined />}
-              onClick={insertCode}
-            />
-            <Divider type="vertical" />
-            <IconButton
-              title="链接"
-              icon={<LinkOutlined />}
-              onClick={insertLink}
-            />
-            <IconButton
-              title="图片"
-              icon={<PictureOutlined />}
-              onClick={insertImage}
-            />
-            <Divider type="vertical" />
-            <IconButton
-              title="分割线"
-              icon={<MinusOutlined />}
-              onClick={insertDivider}
+    <Auth>
+      <div className="create-page">
+        <div className="create-header">
+          <div className="back-btn">
+            <LeftOutlined style={{ fontSize: 18 }} />
+          </div>
+          <div className="input-box">
+            <Input
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="请输入标题"
             />
           </div>
+          <div className="header-action">
+            <Button
+              style={{ marginRight: 20 }}
+              onClick={() => setEditable(!editable)}
+              type="default"
+            >
+              预览
+            </Button>
+            <Button
+              onClick={handleSave}
+              style={{ marginRight: 20 }}
+              type="primary"
+            >
+              发布
+            </Button>
+          </div>
         </div>
-        <div className="create-content">
-          {editable ? (
-            <Codemirror
-              ref={editorRef}
-              className="markdown-editor"
-              value={value}
-              onChange={setValue}
-            />
-          ) : (
-            <div
-              dangerouslySetInnerHTML={{ __html: markdownToHtml(value) }}
-            ></div>
-          )}
+        <div className="create-body">
+          <div className="toolbar">
+            <div className="toolbar-inner">
+              <IconButton
+                title="撤销"
+                style={{ transform: 'rotate(90deg)' }}
+                icon={<UndoOutlined />}
+                onClick={handleUndo}
+              />
+              <IconButton
+                title="重做"
+                style={{ transform: 'rotate(-90deg)' }}
+                icon={<RedoOutlined />}
+                onClick={handleRedo}
+              />
+              <Divider type="vertical" />
+              <IconButton
+                title="标题"
+                icon={<FontSizeOutlined />}
+                onClick={insertHeading}
+              />
+              <Divider type="vertical" />
+              <IconButton
+                title="粗体"
+                icon={<BoldOutlined />}
+                onClick={insertBold}
+              />
+              <IconButton
+                title="斜体"
+                icon={<ItalicOutlined />}
+                onClick={insertItalic}
+              />
+              <IconButton
+                title="删除线"
+                icon={<StrikethroughOutlined />}
+                onClick={insertStrikethrough}
+              />
+              <Divider type="vertical" />
+              <IconButton
+                title="无序列表"
+                icon={<BarsOutlined />}
+                onClick={insertUnorderedList}
+              />
+              <IconButton
+                title="有序列表"
+                icon={<OrderedListOutlined />}
+                onClick={insertOrderedList}
+              />
+              <IconButton
+                title="可选列表"
+                icon={<CheckSquareOutlined />}
+                style={{ padding: '0 8px' }}
+                onClick={insertCheckList}
+              />
+              <Divider type="vertical" />
+              <IconButton
+                title="引用"
+                icon={<DoubleRightOutlined />}
+                style={{ padding: '0 8px' }}
+                onClick={insertQuote}
+              />
+              <IconButton
+                title="表格"
+                icon={<TableOutlined />}
+                onClick={insertTable}
+              />
+              <IconButton
+                title="代码"
+                icon={<RetweetOutlined />}
+                onClick={insertCode}
+              />
+              <Divider type="vertical" />
+              <IconButton
+                title="链接"
+                icon={<LinkOutlined />}
+                onClick={insertLink}
+              />
+              <IconButton
+                title="图片"
+                icon={<PictureOutlined />}
+                onClick={insertImage}
+              />
+              <Divider type="vertical" />
+              <IconButton
+                title="分割线"
+                icon={<MinusOutlined />}
+                onClick={insertDivider}
+              />
+            </div>
+          </div>
+          <div className="create-content">
+            {editable ? (
+              <Codemirror
+                ref={editorRef}
+                className="markdown-editor"
+                value={value}
+                onChange={setValue}
+              />
+            ) : (
+              <div
+                dangerouslySetInnerHTML={{ __html: markdownToHtml(value) }}
+              ></div>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </Auth>
   )
 }

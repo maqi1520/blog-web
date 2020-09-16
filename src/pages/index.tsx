@@ -71,43 +71,37 @@ export default function ListPage({
             }}
             dataSource={res?.data}
             renderItem={(item, index) => (
-              <List.Item
-                onClick={(e) => router.push(`/detail/${item.id}`)}
-                key={index}
-                actions={[
-                  <IconText
-                    icon={<TagOutlined />}
-                    text={_.map(item.tag, (v) => (
-                      <Tag
-                        key={item.id}
-                        color={color[Math.floor(Math.random() * color.length)]}
-                      >
-                        {v}
-                      </Tag>
-                    ))}
-                  />,
-                  item.category ? (
-                    <IconText
-                      icon={<FolderOutlined />}
-                      text={item.category.map((v, index) => (
-                        <Tag key={index} color="green">
-                          {v}
-                        </Tag>
-                      ))}
+              <Link key={index} href="/detail/[id]" as={`/detail/${item.id}`}>
+                <a>
+                  <List.Item
+                    actions={[
+                      item.categories ? (
+                        <IconText
+                          icon={<TagOutlined />}
+                          text={item.categories.map((v, index) => (
+                            <Tag key={index} color="green">
+                              {v.name}
+                            </Tag>
+                          ))}
+                        />
+                      ) : null,
+                      <IconText
+                        icon={<CalendarOutlined />}
+                        text={item.createdAt}
+                      />,
+                      <IconText
+                        icon={<EyeOutlined />}
+                        text={`${item.readedCount} 次预览`}
+                      />,
+                    ]}
+                  >
+                    <List.Item.Meta
+                      title={item.title}
+                      description={item.summary}
                     />
-                  ) : null,
-                  <IconText
-                    icon={<CalendarOutlined />}
-                    text={item.createdAt}
-                  />,
-                  <IconText
-                    icon={<EyeOutlined />}
-                    text={`${item.readedCount} 次预览`}
-                  />,
-                ]}
-              >
-                <List.Item.Meta title={item.title} description={item.summary} />
-              </List.Item>
+                  </List.Item>
+                </a>
+              </Link>
             )}
           />
         </div>

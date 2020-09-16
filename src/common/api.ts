@@ -40,6 +40,10 @@ export const login = <T>(data: { password: string; email: string }) => {
   return request.post<T>('/auth/login', data).then((res) => res.data)
 }
 
+export const getUserInfo = <T>() => {
+  return request.post<T>('/auth/me').then((res) => res.data)
+}
+
 export const getArticles = <T>(params?: {
   pageNum?: string
   pageSize?: string

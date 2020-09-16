@@ -1,8 +1,13 @@
 import { Ilist } from './base'
 
+interface Icategory {
+  id: string
+  name: string
+}
+
 export interface IArticle {
   tag: string[]
-  category: string[]
+  categories: Icategory[]
   title: string
   readedCount: number
   id: number

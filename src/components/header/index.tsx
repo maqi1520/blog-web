@@ -8,9 +8,10 @@ import {
 } from '@ant-design/icons'
 import { Button, Col, Layout, Menu, Row } from 'antd'
 import Link from 'next/link'
-import React, { ReactElement, useEffect, useState } from 'react'
+import React, { ReactElement, useContext } from 'react'
 import '@/styles/header.less'
 import { useRouter } from 'next/router'
+import { Context, IContext } from '@/components/layout/LayoutProvider'
 
 const routes = [
   {
@@ -39,14 +40,8 @@ const { Header } = Layout
 interface Props {}
 
 export default function PageHeader({}: Props): ReactElement {
+  const [state] = useContext(Context) as IContext
   const router = useRouter()
-
-  const [isLogin, setLogin] = useState(false)
-  useEffect(() => {
-    if (sessionStorage.getItem('token')) {
-      setLogin(true)
-    }
-  }, [])
 
   return (
     <Header className="header-container">
@@ -79,7 +74,7 @@ export default function PageHeader({}: Props): ReactElement {
             </Menu>
           </Col>
           <Col lg={{ span: 3 }} md={{ span: 3 }} xs={{ span: 0 }}>
-            {isLogin ? (
+            {state.user ? (
               <Link href="/create">
                 <Button shape="circle" icon={<PlusOutlined />} type="primary" />
               </Link>
