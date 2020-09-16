@@ -3,6 +3,7 @@ const lessToJS = require('less-vars-to-js')
 
 const fs = require('fs')
 const path = require('path')
+const { nodeModuleNameResolver } = require('typescript')
 
 const themeVariables = lessToJS(
   fs.readFileSync(
@@ -11,20 +12,22 @@ const themeVariables = lessToJS(
   )
 )
 
+let rewrites = [
+  {
+    source: '/page/:path*',
+    destination: `/?pageNum=:path*`,
+  },
+]
+if (process.env.NODE_ENV !== 'production') {
+  rewrites.push({
+    source: '/api/:path*',
+    destination: `http://localhost:4000/api/:path*`,
+  })
+}
+
 module.exports = withLess({
   async rewrites() {
-    return process.env.NODE_ENV !== 'production'
-      ? [
-          {
-            source: '/api/:path*',
-            destination: `http://localhost:4000/api/:path*`,
-          },
-          {
-            source: '/page/:path*',
-            destination: `/?pageNum=:path*`,
-          },
-        ]
-      : []
+    return rewrites
   },
   lessLoaderOptions: {
     javascriptEnabled: true,
