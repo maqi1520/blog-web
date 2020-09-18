@@ -90,7 +90,7 @@ export default class CodeMirrorEditor extends Component<Props, State> {
       this.props.onChange(value)
     }
   }
-  onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  onChange = () => {
     //this.props.onChange(e.target.value)
   }
 

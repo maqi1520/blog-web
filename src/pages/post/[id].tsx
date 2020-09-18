@@ -1,24 +1,47 @@
 import React, { ReactElement } from 'react'
-import { Card, Row, Col, Affix } from 'antd'
+import { Card, Row, Col, Affix, Result, Button, Divider } from 'antd'
 import { markdownToHtml, markdownToToc } from '@/common/markdown'
-import { IArticle } from '@/types'
+import { Article } from '@/types'
 import { CalendarOutlined, EyeOutlined } from '@ant-design/icons'
 import { getArticle } from '@/common/api'
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import { BLOG_NAME } from '@/common/config'
+import Link from 'next/link'
 
 export default function ArticleDetail({
   data,
 }: {
-  data: IArticle
+  data: Article
 }): ReactElement {
+  if (!data) {
+    return (
+      <Result
+        status="404"
+        title="404"
+        subTitle="Sorry, the page you visited does not exist."
+        extra={
+          <Link href="/">
+            <Button type="primary">Back Home</Button>
+          </Link>
+        }
+      />
+    )
+  }
+
   const extra = (
     <div className="content-extra">
       <CalendarOutlined style={{ marginRight: 8 }} />
       {data?.createdAt}
+      <Divider type="vertical" />
       <EyeOutlined style={{ marginRight: 8, marginLeft: 8 }} />
       {data?.readedCount} 次预览
+      <Divider type="vertical" />
+      <Link href="/post/:id/edit" as={`/post/${data.id}/edit`}>
+        <Button ghost size="small" type="primary">
+          编辑
+        </Button>
+      </Link>
     </div>
   )
 
@@ -53,10 +76,18 @@ export default function ArticleDetail({
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { id } = ctx.query
-  const data = await getArticle(id as string)
-  return {
-    props: {
-      data,
-    },
+  try {
+    const data = await getArticle(id as string)
+    return {
+      props: {
+        data,
+      },
+    }
+  } catch (error) {
+    return {
+      props: {
+        data: null,
+      },
+    }
   }
 }

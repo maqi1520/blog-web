@@ -1,8 +1,8 @@
-import { Ilist } from './base'
+import { List } from './base'
 
-export interface ITag {
+export interface Tag {
   name: string
   id: number
   createdAt: string
 }
-export type ItagList = Ilist<ITag>
+export type ItagList = List<Tag>

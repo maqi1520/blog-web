@@ -16,9 +16,9 @@ export default function IconButton({
 }: Props): ReactElement {
   return (
     <Tooltip title={title} placement="bottom">
-      <span style={style} onClick={onClick} className="lake-button">
+      <button style={style} onClick={onClick} className="lake-button">
         {icon}
-      </span>
+      </button>
     </Tooltip>
   )
 }

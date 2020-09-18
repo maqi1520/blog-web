@@ -17,6 +17,10 @@ let rewrites = [
     source: '/page/:path*',
     destination: `/?pageNum=:path*`,
   },
+  {
+    source: '/post/:id/edit',
+    destination: `/create`,
+  },
 ]
 if (process.env.NODE_ENV !== 'production') {
   rewrites.push({

@@ -37,9 +37,7 @@ const routes = [
 ]
 const { Header } = Layout
 
-interface Props {}
-
-export default function PageHeader({}: Props): ReactElement {
+export default function PageHeader(): ReactElement {
   const [state] = useContext(Context) as IContext
   const router = useRouter()
 

@@ -1,33 +1,19 @@
-import { getArticles } from '@/common/api'
+import { getArticles } from '@/lib/api'
 import { IArticleList } from '@/types'
-import { color } from '@/utils'
-import {
-  CalendarOutlined,
-  EyeOutlined,
-  FolderOutlined,
-  TagOutlined,
-} from '@ant-design/icons'
-import { List, Tag, Col, Row } from 'antd'
-import _ from 'lodash'
+import { List, Col, Row } from 'antd'
 import { useRouter } from 'next/router'
 import React, { ReactElement } from 'react'
 import Sider from '@/components/sider'
-import { IArticle, ITag } from '@/types'
+import { Article, ITag } from '@/types'
 import { GetServerSideProps } from 'next'
 import Link from 'next/link'
 import Head from 'next/head'
 import { BLOG_NAME } from '@/common/config'
+import { ArcitleItem } from '@/components/ArcitleItem'
 
-const IconText = ({ icon, text }: { icon: ReactElement; text: any }) => (
-  <span>
-    {icon}
-    <span style={{ marginLeft: 8 }}>{text}</span>
-  </span>
-)
-
-interface Props {
+export interface Props {
   articleData: IArticleList
-  articles: IArticle[]
+  articles: Article[]
   tags: ITag[]
 }
 
@@ -71,37 +57,7 @@ export default function ListPage({
             }}
             dataSource={res?.data}
             renderItem={(item, index) => (
-              <Link key={index} href="/detail/[id]" as={`/detail/${item.id}`}>
-                <a>
-                  <List.Item
-                    actions={[
-                      item.categories ? (
-                        <IconText
-                          icon={<TagOutlined />}
-                          text={item.categories.map((v, index) => (
-                            <Tag key={index} color="green">
-                              {v.name}
-                            </Tag>
-                          ))}
-                        />
-                      ) : null,
-                      <IconText
-                        icon={<CalendarOutlined />}
-                        text={item.createdAt}
-                      />,
-                      <IconText
-                        icon={<EyeOutlined />}
-                        text={`${item.readedCount} 次预览`}
-                      />,
-                    ]}
-                  >
-                    <List.Item.Meta
-                      title={item.title}
-                      description={item.summary}
-                    />
-                  </List.Item>
-                </a>
-              </Link>
+              <ArcitleItem key={index} item={item} />
             )}
           />
         </div>

@@ -5,15 +5,14 @@ interface Icategory {
   name: string
 }
 
-export interface IArticle {
-  tag: string[]
-  categories: Icategory[]
+export interface Article {
+  categories?: Icategory[]
   title: string
-  readedCount: number
-  id: number
-  summary: string
-  createdAt: string
+  readedCount?: number
+  id?: number
+  summary?: string
+  createdAt?: string
   content: string
 }
 
-export type IArticleList = Ilist<IArticle>
+export type IArticleList = Ilist<Article>

@@ -1,4 +1,4 @@
-import { getArticles } from '@/common/api'
+import { getArticles } from '@/lib/api'
 import { BLOG_NAME } from '@/common/config'
 import { IArticleList } from '@/types'
 import { ClockCircleOutlined } from '@ant-design/icons'

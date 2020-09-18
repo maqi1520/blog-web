@@ -1,28 +1,49 @@
-import usePage from '@/common/usePage'
-import useRequest from '@/common/useRequest'
 import { IStarList } from '@/types'
-import { List, Spin } from 'antd'
+import { getStars } from '@/lib/api'
+import { GetServerSideProps } from 'next'
+import { List } from 'antd'
 import React, { ReactElement } from 'react'
+import { useRouter } from 'next/router'
+import Link from 'next/link'
+import Head from 'next/head'
+import { BLOG_NAME } from '@/common/config'
 
-export default function Page(): ReactElement {
-  const pagination = usePage()
-  const { data: res, loading } = useRequest<IStarList>({
-    url: '/star',
-    params: {
-      pageNo: pagination.current,
-      pageSize: pagination.pageSize,
-    },
-  })
+interface Props {
+  starData: IStarList
+}
 
-  const { data, total } = res || { data: [], total: 0 }
+export default function Page({ starData: res }: Props): ReactElement {
+  const router = useRouter()
+  const { pageNum = '1' } = router.query
+
+  const itemRender = (
+    current: number,
+    type: 'page' | 'prev' | 'next' | 'jump-prev' | 'jump-next',
+    originalElement: React.ReactElement
+  ) => {
+    return (
+      <Link as={`/page/${current}`} href={`/?pageNum=${current}`}>
+        {originalElement}
+      </Link>
+    )
+  }
+
   return (
-    <Spin size="default" spinning={loading}>
+    <>
+      <Head>
+        <title>{BLOG_NAME}</title>
+      </Head>
       <List
         className="star-list"
         header={<div className="star-header">文章收藏</div>}
         itemLayout="vertical"
-        pagination={{ ...pagination, total }}
-        dataSource={data}
+        pagination={{
+          current: +pageNum,
+          pageSize: 10,
+          itemRender,
+          total: res?.total,
+        }}
+        dataSource={res.data}
         renderItem={(item) => (
           <List.Item key={item.id} extra={item.createdAt}>
             <List.Item.Meta
@@ -40,6 +61,19 @@ export default function Page(): ReactElement {
           </List.Item>
         )}
       />
-    </Spin>
+    </>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { pageNum = '1' } = ctx.query
+  const starData = await getStars({
+    pageNum: pageNum as string,
+    pageSize: '10',
+  })
+  return {
+    props: {
+      starData,
+    },
+  }
 }

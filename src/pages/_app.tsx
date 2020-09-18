@@ -1,11 +1,10 @@
 import { AppProps, AppContext } from 'next/app'
-import { GetServerSidePropsContext } from 'next'
 import Layout from '@/components/layout'
 import LayoutProvider from '@/components/layout/LayoutProvider'
 import '@/styles/index.less'
 import '@/styles/globals.less'
-import { getUser } from '@/common/api'
-import { IUser } from '@/types/base'
+import { getUser } from '@/lib/api'
+import { User } from '@/types/base'
 
 function getCookie(name: string, cookie: string | undefined) {
   if (!cookie) return
@@ -14,7 +13,7 @@ function getCookie(name: string, cookie: string | undefined) {
   if (parts.length === 2) return (parts.pop() as string).split(';').shift()
 }
 interface Props extends AppProps {
-  user: IUser
+  user: User
 }
 
 function MyApp({ Component, pageProps, user }: Props) {
@@ -34,7 +33,9 @@ MyApp.getInitialProps = async (appctx: AppContext) => {
   if (token) {
     try {
       user = await getUser(token)
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    }
   }
   return {
     user,

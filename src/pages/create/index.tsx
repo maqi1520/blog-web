@@ -1,4 +1,10 @@
-import React, { ReactElement, useState, useCallback, useRef } from 'react'
+import React, {
+  ReactElement,
+  useState,
+  useCallback,
+  useRef,
+  useEffect,
+} from 'react'
 import { Button, Input, Divider, message } from 'antd'
 import {
   MinusOutlined,
@@ -18,13 +24,14 @@ import {
   TableOutlined,
   LeftOutlined,
 } from '@ant-design/icons'
-import api from '@/common/api'
+import api, { getArticle } from '@/common/api'
 import IconButton from '@/components/IconButton'
 import Auth from '@/components/layout/Auth'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { markdownToHtml } from '@/common/markdown'
+import { Article } from '@/types'
 
 const Codemirror = dynamic(() => import('@/components/codemirror'), {
   ssr: false,
@@ -40,17 +47,28 @@ const UNORDERED_LIST = (t: string) => `- ${t || '无序列表'}`
 const ORDERED_LIST = (t: string) => `1. ${t || '无序列表'}`
 const CHECK_LIST = (t: string) => `- [] ${t || '可选列表'}`
 const QUOTE = (t: string) => `> ${t || '引用'}`
-const TABLE = (t: string) => `\n| | |\n|--|--|\n|  |  |`
+const TABLE = () => `\n| | |\n|--|--|\n|  |  |`
 const CODE = (t: string) => '\n```\n' + (t || '代码') + '\n```'
 const LINK = (t: string) => `[${t || '链接'}](地址)`
 const IMAGE = (t: string) => `[${t || '链接'}](地址)`
-const DIVIDER = (t: string) => '---'
+const DIVIDER = () => '---'
 
 export default function Create(): ReactElement {
-  const editorRef: React.MutableRefObject<any> = useRef(null)
-  const [value, setValue] = useState<string>('')
-  const [title, setTitle] = useState<string>('')
+  const router = useRouter()
+  const { id } = router.query
+  const [data, setArticle] = useState<Article>({
+    title: '',
+    content: '',
+  })
+  useEffect(() => {
+    if (id) {
+      getArticle<Article>(+id).then((res) => {
+        setArticle(res)
+      })
+    }
+  }, [id])
 
+  const editorRef: React.MutableRefObject<any> = useRef(null)
   const [editable, setEditable] = useState<boolean>(true)
 
   const insertContent = useCallback((fn) => {
@@ -103,21 +121,23 @@ export default function Create(): ReactElement {
     insertContent(DIVIDER)
   }, [insertContent])
 
-  const router = useRouter()
+  const setValue = useCallback((content) => {
+    setArticle((prev) => ({ ...prev, content }))
+  }, [])
+  const setTitle = useCallback((title) => {
+    setArticle((prev) => ({ ...prev, title }))
+  }, [])
 
   const handleSave = useCallback(async () => {
     try {
-      const { data: res } = await api.post('/article', {
-        content: value,
-        title,
-      })
+      const { data: res } = await api.post('/article', data)
       if (res) {
         router.push('/')
       }
     } catch (error) {
       message.error(error.message)
     }
-  }, [router, title, value])
+  }, [router, data])
 
   return (
     <Auth>
@@ -130,7 +150,7 @@ export default function Create(): ReactElement {
           </div>
           <div className="input-box">
             <Input
-              value={title}
+              value={data.title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="请输入标题"
             />
@@ -247,12 +267,14 @@ export default function Create(): ReactElement {
               <Codemirror
                 ref={editorRef}
                 className="markdown-editor"
-                value={value}
+                value={data.content || ''}
                 onChange={setValue}
               />
             ) : (
               <div
-                dangerouslySetInnerHTML={{ __html: markdownToHtml(value) }}
+                dangerouslySetInnerHTML={{
+                  __html: markdownToHtml(data.content || ''),
+                }}
               ></div>
             )}
           </div>

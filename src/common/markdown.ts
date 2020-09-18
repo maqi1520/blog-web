@@ -6,23 +6,35 @@ import highlight from 'remark-highlight.js'
 
 function mytoc() {
   return (tree: any) => {
-    var ast = toc(tree, {
+    const ast = toc(tree, {
       maxDepth: 6,
     })
-    tree.children = [ast.map]
+    if (ast.map) {
+      tree.children = [ast.map]
+    } else {
+      tree.children = []
+    }
   }
 }
 
 export function markdownToToc(markdown: string) {
-  const result = remark().use(slug).use(mytoc).use(html).processSync(markdown)
-  return result.toString()
+  try {
+    const result = remark().use(slug).use(mytoc).use(html).processSync(markdown)
+    return result.toString()
+  } catch (error) {
+    return 'remark 编译 错误'
+  }
 }
 
 export function markdownToHtml(markdown: string) {
-  const result = remark()
-    .use(slug)
-    .use(highlight)
-    .use(html)
-    .processSync(markdown)
-  return result.toString()
+  try {
+    const result = remark()
+      .use(slug)
+      .use(highlight)
+      .use(html)
+      .processSync(markdown)
+    return result.toString()
+  } catch (error) {
+    return 'remark 编译 错误'
+  }
 }

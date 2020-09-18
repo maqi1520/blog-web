@@ -2,11 +2,11 @@ import { Card, Divider, Tag } from 'antd'
 import Link from 'next/link'
 import React, { ReactElement } from 'react'
 import { color } from '@/utils'
-import { IArticle, ITag } from '@/types'
+import { Article, ITag } from '@/types'
 import '@/styles/sider.less'
 
 interface Props {
-  articles: IArticle[]
+  articles: Article[]
   tags: ITag[]
 }
 
@@ -28,7 +28,7 @@ export default function PageSiler({ tags, articles }: Props): ReactElement {
           <ul className="recent-list">
             {articles.map((v) => (
               <li key={v.id}>
-                <Link href="detail/:id" as={`detail/${v.id}`}>
+                <Link href="/post/:id" as={`/post/${v.id}`}>
                   {v.title}
                 </Link>
               </li>
