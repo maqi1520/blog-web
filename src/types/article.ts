@@ -1,4 +1,4 @@
-import { Ilist } from './base'
+import { List } from './base'
 
 interface Icategory {
   id: string
@@ -9,10 +9,12 @@ export interface Article {
   categories?: Icategory[]
   title: string
   readedCount?: number
-  id?: number
+  id?: string
+  userId?: number
+  tag?: []
   summary?: string
   createdAt?: string
   content: string
 }
 
-export type IArticleList = Ilist<Article>
+export type IArticleList = List<Article>

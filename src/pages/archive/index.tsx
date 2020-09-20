@@ -22,9 +22,11 @@ export default function index({ articleData: res }: Props): ReactElement {
         {res.data.map((v, i) => {
           return (
             <Timeline.Item dot={<ClockCircleOutlined />} color="red" key={i}>
-              <Link href="/detail/:id" as={`/detail/${v.id}`}>
+              <Link href="/post/:id" as={`/post/${v.id}`}>
                 <a>
-                  <span className="mr20">{v.createdAt.slice(0, 10)}</span>
+                  <span className="mr20">
+                    {(v.createdAt as string).slice(0, 10)}
+                  </span>
                   <span>{v.title}</span>
                 </a>
               </Link>

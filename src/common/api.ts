@@ -44,10 +44,10 @@ export const getUserInfo = <T>() => {
   return request.post<T>('/auth/me').then((res) => res.data)
 }
 
-export const getArticle = <T>(id: number) => {
-  return request.post<T>(`/articles/${id}`).then((res) => res.data)
+export const getArticle = <T>(id: string) => {
+  return request.get<T>(`/articles/${id}`).then((res) => res.data)
 }
 
-export const removeArticle = (id: number) => {
+export const removeArticle = (id: string) => {
   return request.delete(`/articles/${id}`).then((res) => res.data)
 }

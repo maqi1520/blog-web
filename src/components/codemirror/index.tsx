@@ -3,13 +3,20 @@ import 'codemirror/mode/markdown/markdown'
 import 'codemirror/mode/xml/xml'
 import React, { Component, CSSProperties } from 'react'
 
+export interface OnRef {
+  insertText: (fn: (text?: string) => string) => void
+  editor: CodeMirror.Editor
+}
+
 interface Props {
   ref?: any
   style?: CSSProperties
   readOnly?: boolean
   defaultValue?: string
   className?: string
+  onRef: (v: OnRef) => void
   onChange?: (value: string) => void
+  onScroll?: (value: CodeMirror.ScrollInfo) => void
   forceTextArea?: boolean
   value?: string
 }
@@ -47,6 +54,15 @@ export default class CodeMirrorEditor extends Component<Props, State> {
         lineWrapping: true,
       })
       this.editor.on('change', this.handleChange)
+      if (this.props.onScroll) {
+        this.editor.on('scroll', (instance: CodeMirror.Editor) => {
+          this.props.onScroll && this.props.onScroll(instance.getScrollInfo())
+        })
+      }
+      this.props.onRef({
+        editor: this.editor,
+        insertText: this.insertText,
+      })
     }
   }
 

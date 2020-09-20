@@ -5,12 +5,12 @@ import {
   DeleteOutlined,
 } from '@ant-design/icons'
 import { List, message, Tag, Popconfirm } from 'antd'
-import React, { useCallback } from 'react'
+import React, { useCallback, memo, ReactElement, useContext } from 'react'
 import Link from 'next/link'
-import { memo, ReactElement } from 'react'
 import { Article } from '@/types'
 import { removeArticle } from '@/common/api'
 import Router from 'next/router'
+import { Context, IContext } from '@/components/layout/LayoutProvider'
 
 export const IconText = ({ icon, text }: { icon: ReactElement; text: any }) => (
   <span>
@@ -23,9 +23,11 @@ export interface Props {
   item: Article
 }
 
-const ArcitleItem = function ({ item }: Props) {
+export const ArcitleItem = memo(({ item }: Props) => {
+  const [state] = useContext(Context) as IContext
+  const userId = state.user?.id
   const handleRemove = useCallback(() => {
-    removeArticle(item.id as number)
+    removeArticle(item.id as string)
       .then(() => {
         message.success('删除成功！')
         Router.replace('/')
@@ -58,14 +60,16 @@ const ArcitleItem = function ({ item }: Props) {
           icon={<EyeOutlined />}
           text={`${item.readedCount} 次预览`}
         />,
-        <Popconfirm
-          key="delete"
-          placement="top"
-          title={'确认删除？'}
-          onConfirm={handleRemove}
-        >
-          <DeleteOutlined />
-        </Popconfirm>,
+        item.userId === userId ? (
+          <Popconfirm
+            key="del"
+            placement="top"
+            title={'确认删除？'}
+            onConfirm={handleRemove}
+          >
+            <DeleteOutlined />
+          </Popconfirm>
+        ) : undefined,
       ]}
     >
       <Link href="/post/[id]" as={`/post/${item.id}`}>
@@ -78,6 +82,4 @@ const ArcitleItem = function ({ item }: Props) {
       </Link>
     </List.Item>
   )
-}
-
-export default memo(ArcitleItem)
+})

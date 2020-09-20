@@ -1,0 +1,152 @@
+@border-color: #f6f6f6;
+
+@text-color-secondary: #333;
+.markdown-preview {
+  font-size: 16px;
+  line-height: 1.75;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin-top: 1em;
+    margin-bottom: 16px;
+  }
+  h6 {
+    font-size: 16px;
+  }
+  h5 {
+    font-size: 18px;
+  }
+  h4 {
+    font-size: 22px;
+  }
+  h3 {
+    font-size: 28px;
+  }
+  h2 {
+    font-size: 36px;
+  }
+  h1 {
+    font-size: 46px;
+  }
+
+  p {
+    margin-bottom: 16px;
+  }
+
+  ul {
+    list-style-type: disc;
+  }
+
+  ol {
+    list-style-type: decimal;
+  }
+
+  ul,
+  ol {
+    list-style-position: outside;
+    padding-left: 32px;
+    margin-bottom: 16px;
+
+    ul,
+    ol {
+      margin-bottom: 0;
+    }
+  }
+
+  code {
+    padding: 2px 4px;
+    font-size: 14px;
+    background-color: rgba(27, 31, 35, 0.05);
+    border-radius: 3px;
+  }
+
+  pre,
+  pre[class*='language-'] {
+    margin-top: 0 !important;
+    margin-bottom: 16px !important;
+
+    code {
+      background: none;
+      border-radius: 0;
+      padding: 0;
+    }
+  }
+
+  code[class*='language-'],
+  pre[class*='language-'] {
+    font-size: 14px !important;
+    text-shadow: none !important;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+  }
+
+  figure {
+    img {
+      display: block;
+      max-width: 100%;
+    }
+    figcaption {
+      text-align: center;
+      font-size: 12px;
+      color: @text-color-secondary;
+      margin-top: 8px;
+    }
+  }
+
+  table {
+    width: 100%;
+    margin-bottom: 16px;
+    border: 1px solid @border-color;
+
+    th,
+    td {
+      padding: 8px 16px;
+      vertical-align: top;
+      border: 1px solid @border-color;
+    }
+
+    thead th {
+      vertical-align: bottom;
+      border-bottom: 1px solid @border-color;
+    }
+  }
+
+  hr {
+    box-sizing: border-box;
+    height: 1px;
+    margin-top: 16px;
+    margin-bottom: 15px;
+    border: 0;
+    border-style: solid;
+    border-top: 1px solid @border-color;
+    overflow: hidden;
+  }
+  pre {
+    overflow: initial;
+    code.hljs {
+      font-size: 0.8em;
+      padding: 0.5em 1em;
+      background: #f8f8f8;
+    }
+  }
+
+  blockquote {
+    padding: 16px;
+    margin-bottom: 16px;
+    border-radius: 4px;
+    font-size: 18px;
+    border-left: 4px solid @border-color;
+    background-color: rgba(0, 0, 0, 0.05);
+
+    & > *:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

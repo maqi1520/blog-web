@@ -5,7 +5,8 @@ import React, {
   useRef,
   useEffect,
 } from 'react'
-import { Button, Input, Divider, message } from 'antd'
+import { Button, Input, Divider, message, Row, Col } from 'antd'
+import CodeMirror from 'codemirror'
 import {
   MinusOutlined,
   PictureOutlined,
@@ -32,6 +33,9 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { markdownToHtml } from '@/common/markdown'
 import { Article } from '@/types'
+import { OnRef } from '@/components/codemirror'
+import Head from 'next/head'
+import { BLOG_NAME } from '@/common/config'
 
 const Codemirror = dynamic(() => import('@/components/codemirror'), {
   ssr: false,
@@ -62,23 +66,29 @@ export default function Create(): ReactElement {
   })
   useEffect(() => {
     if (id) {
-      getArticle<Article>(+id).then((res) => {
+      getArticle<Article>(id as string).then((res) => {
         setArticle(res)
       })
     }
   }, [id])
 
-  const editorRef: React.MutableRefObject<any> = useRef(null)
+  const [height, setHeight] = useState<string | number>('100%')
+  useEffect(() => {
+    setHeight(document.body.clientHeight - 56 - 40 - 32)
+  }, [])
+
+  const previewRef = useRef<HTMLDivElement | null>(null)
+  const editorRef = useRef<OnRef | null>(null)
   const [editable, setEditable] = useState<boolean>(true)
 
   const insertContent = useCallback((fn) => {
     editorRef.current?.insertText(fn)
   }, [])
   const handleUndo = useCallback(() => {
-    editorRef.current.editor.undo()
+    editorRef.current?.editor.undo()
   }, [])
   const handleRedo = useCallback(() => {
-    editorRef.current.editor.redo()
+    editorRef.current?.editor.redo()
   }, [])
   const insertHeading = useCallback(() => {
     insertContent(HEADING)
@@ -128,11 +138,30 @@ export default function Create(): ReactElement {
     setArticle((prev) => ({ ...prev, title }))
   }, [])
 
+  const onEditorRef = useCallback((v: OnRef) => {
+    editorRef.current = v
+  }, [])
+
+  const onScroll = useCallback((value: CodeMirror.ScrollInfo) => {
+    if (previewRef.current) {
+      previewRef.current.scrollTop = Math.round(
+        previewRef.current.scrollHeight * (value.top / value.height)
+      )
+    }
+  }, [])
+
   const handleSave = useCallback(async () => {
     try {
-      const { data: res } = await api.post('/article', data)
-      if (res) {
-        router.push('/')
+      if (!data.id) {
+        const { data: res } = await api.post('/article', data)
+        if (res) {
+          router.push('/')
+        }
+      } else {
+        const { data: res } = await api.put(`/article/${data.id}`, data)
+        if (res) {
+          router.push('/')
+        }
       }
     } catch (error) {
       message.error(error.message)
@@ -142,6 +171,9 @@ export default function Create(): ReactElement {
   return (
     <Auth>
       <div className="create-page">
+        <Head>
+          <title>{`写文章-${BLOG_NAME}`}</title>
+        </Head>
         <div className="create-header">
           <div className="back-btn">
             <Link href="/">
@@ -262,22 +294,34 @@ export default function Create(): ReactElement {
               />
             </div>
           </div>
-          <div className="create-content">
-            {editable ? (
-              <Codemirror
-                ref={editorRef}
-                className="markdown-editor"
-                value={data.content || ''}
-                onChange={setValue}
-              />
-            ) : (
+          <Row style={{ padding: 16 }} gutter={16}>
+            <Col span={editable ? 12 : 24}>
               <div
-                dangerouslySetInnerHTML={{
-                  __html: markdownToHtml(data.content || ''),
-                }}
-              ></div>
-            )}
-          </div>
+                style={{ height, paddingRight: 0 }}
+                className="create-content"
+              >
+                <Codemirror
+                  onRef={onEditorRef}
+                  className="markdown-editor"
+                  value={data.content || ''}
+                  onChange={setValue}
+                  onScroll={onScroll}
+                />
+              </div>
+            </Col>
+            <Col span={editable ? 12 : 0}>
+              {editable && (
+                <div
+                  ref={previewRef}
+                  style={{ height }}
+                  className="create-content markdown-preview"
+                  dangerouslySetInnerHTML={{
+                    __html: markdownToHtml(data.content || ''),
+                  }}
+                ></div>
+              )}
+            </Col>
+          </Row>
         </div>
       </div>
     </Auth>
