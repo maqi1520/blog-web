@@ -2,7 +2,7 @@ import { Card, Divider, Tag } from 'antd'
 import Link from 'next/link'
 import React, { ReactElement } from 'react'
 import { color } from '@/utils'
-import { Article, ITag } from '@/types'
+import { Article, Tag as ITag } from '@/types'
 import '@/styles/sider.less'
 
 interface Props {

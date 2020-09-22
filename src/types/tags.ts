@@ -5,4 +5,4 @@ export interface Tag {
   id: number
   createdAt: string
 }
-export type ItagList = List<Tag>
+export type TagList = List<Tag>
