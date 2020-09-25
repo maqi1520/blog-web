@@ -9,6 +9,7 @@ import Head from 'next/head'
 import { BLOG_NAME } from '@/common/config'
 import Link from 'next/link'
 import { Context, IContext } from '@/components/layout/LayoutProvider'
+import '@/styles/post.less'
 
 export default function ArticleDetail({
   data,
@@ -59,8 +60,13 @@ export default function ArticleDetail({
           {data.title}-{BLOG_NAME}
         </title>
       </Head>
-      <Col span={18}>
-        <Card title={data?.title} extra={extra}>
+      <Col sm={{ span: 24 }} md={{ span: 18 }}>
+        <Card>
+          <div className="post-head">
+            <h1>{data?.title}</h1>
+            {extra}
+          </div>
+
           <div
             className="markdown-preview"
             dangerouslySetInnerHTML={{ __html: markdownToHtml(data.content) }}
@@ -68,11 +74,12 @@ export default function ArticleDetail({
         </Card>
       </Col>
 
-      <Col span={6}>
+      <Col sm={{ span: 0 }} md={{ span: 6 }}>
         <Affix offsetTop={20}>
-          <div>
-            <div>目录</div>
+          <div className="toc">
+            <div className="toc-title">目录</div>
             <div
+              className="toc-body"
               dangerouslySetInnerHTML={{ __html: markdownToToc(data.content) }}
             ></div>
           </div>

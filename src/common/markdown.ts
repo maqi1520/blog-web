@@ -8,6 +8,7 @@ function mytoc() {
   return (tree: any) => {
     const ast = toc(tree, {
       maxDepth: 6,
+      tight: true,
     })
     if (ast.map) {
       tree.children = [ast.map]
