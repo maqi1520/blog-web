@@ -32,18 +32,17 @@ if (process.env.NODE_ENV !== 'production') {
     source: '/api/:path*',
     destination: `http://localhost:4000/api/:path*`,
   })
-} else {
-  module.exports = withLess({
-    async rewrites() {
-      return rewrites
-    },
-    lessLoaderOptions: {
-      javascriptEnabled: true,
-      importLoaders: 1,
-      localIdentName: '[local]___[hash:base64:5]',
-      modifyVars: themeVariables, // make your antd custom effective
-    },
-    distDir: 'build',
-    target: 'serverless',
-  })
 }
+module.exports = withLess({
+  async rewrites() {
+    return rewrites
+  },
+  lessLoaderOptions: {
+    javascriptEnabled: true,
+    importLoaders: 1,
+    localIdentName: '[local]___[hash:base64:5]',
+    modifyVars: themeVariables, // make your antd custom effective
+  },
+  distDir: 'build',
+  target: 'serverless',
+})

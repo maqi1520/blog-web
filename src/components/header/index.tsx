@@ -1,4 +1,5 @@
 import {
+  BarsOutlined,
   EditOutlined,
   HomeOutlined,
   PlusOutlined,
@@ -12,7 +13,7 @@ import React, { ReactElement, useContext } from 'react'
 import '@/styles/header.less'
 import { useRouter } from 'next/router'
 import { Context, IContext } from '@/components/layout/LayoutProvider'
-
+import { BLOG_NAME } from '@/common/config'
 const routes = [
   {
     icon: <HomeOutlined />,
@@ -45,14 +46,19 @@ export default function PageHeader(): ReactElement {
     <Header className="header-container">
       <div className="header-content">
         <Row gutter={24}>
-          <Col lg={{ span: 6 }} md={{ span: 6 }} xs={{ span: 0 }}>
+          <Col lg={{ span: 6 }} md={{ span: 6 }} xs={{ span: 18 }}>
             <h1 className="logo">
-              <SmileTwoTone type="smile" twoToneColor="#eb2f96" />
-              <span className="ml10">狂奔小马的博客</span>
+              <Link href="/">
+                <a>
+                  <SmileTwoTone type="smile" twoToneColor="#eb2f96" />
+                  <span className="ml10">{BLOG_NAME}</span>
+                </a>
+              </Link>
             </h1>
           </Col>
-          <Col lg={{ span: 15 }} md={{ span: 15 }} xs={{ span: 24 }}>
+          <Col lg={{ span: 15 }} md={{ span: 15 }} xs={{ span: 6 }}>
             <Menu
+              overflowedIndicator={<BarsOutlined />}
               theme="light"
               mode="horizontal"
               selectedKeys={[router.pathname]}

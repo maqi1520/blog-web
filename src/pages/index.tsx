@@ -1,10 +1,9 @@
 import { getArticles } from '@/lib/api'
-import { IArticleList } from '@/types'
 import { List, Col, Row } from 'antd'
 import { useRouter } from 'next/router'
 import React, { ReactElement } from 'react'
 import Sider from '@/components/sider'
-import { Article, Tag as ITag } from '@/types'
+import { Tag as ITag, IArticleList } from '@/types'
 import { GetServerSideProps } from 'next'
 import Link from 'next/link'
 import Head from 'next/head'
@@ -13,12 +12,10 @@ import { ArcitleItem } from '@/components/ArcitleItem'
 
 export interface Props {
   articleData: IArticleList
-  articles: Article[]
   tags: ITag[]
 }
 
 export default function ListPage({
-  articles,
   tags,
   articleData: res,
 }: Props): ReactElement {
@@ -41,8 +38,8 @@ export default function ListPage({
       <Head>
         <title>{BLOG_NAME}</title>
       </Head>
-      <Col lg={{ span: 6 }} md={{ span: 6 }} xs={{ span: 0 }}>
-        <Sider tags={tags} articles={articles} />
+      <Col lg={{ span: 6 }} md={{ span: 6 }} xs={{ span: 24 }}>
+        <Sider tags={tags} />
       </Col>
       <Col lg={{ span: 18 }} md={{ span: 18 }} xs={{ span: 24 }}>
         <div className="list-wrapper">

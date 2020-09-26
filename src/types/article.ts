@@ -8,7 +8,7 @@ interface Icategory {
 export interface Article {
   categories?: Icategory[]
   title: string
-  readedCount?: number
+  readedCount: number
   id?: string
   userId?: number
   tag?: []

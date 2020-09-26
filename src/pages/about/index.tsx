@@ -2,19 +2,22 @@ import { GithubOutlined } from '@ant-design/icons'
 import { Card, Divider } from 'antd'
 import React, { Component } from 'react'
 
+import Head from 'next/head'
+import { BLOG_NAME } from '@/common/config'
+
 class About extends Component {
   render() {
     return (
       <Card bordered={false}>
+        <Head>
+          <title>{BLOG_NAME}</title>
+        </Head>
         <div className="content-inner-wrapper about">
           <Divider orientation="left">Blog</Divider>
-          <p>
-            一直基于 react 写业务，所以博客选用了 react + react-router + antd
-            这套技术栈
-          </p>
+          <p>一直基于 react 写业务，所以博客选用了 next + antd 这套技术栈</p>
           <p>纯函数式开发，很甜</p>
-          <p>前端：react + antd + react-router + es6 + webpack + axios</p>
-          <p>服务端：koa2 + mysql + sequelize</p>
+          <p>前端：next + typescript + antd + es6 + less + axios</p>
+          <p>服务端：koa2 + mysql + typeorm</p>
           <p className="code">源码戳这里</p>
           <p>
             <a
@@ -65,9 +68,9 @@ class About extends Component {
               skill：
               <ul>
                 <li>前端：Vue、React、ES6/7/8、Echats、Axios</li>
-                <li>服务端：Node、Koa2</li>
+                <li>服务端：Node、Koa2、typeorm</li>
                 <li>数据库：Mysql</li>
-                <li>其他：webpack、git、serverless</li>
+                <li>其他：webpack、git、typescript、serverless</li>
               </ul>
             </li>
           </ul>

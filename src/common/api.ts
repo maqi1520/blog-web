@@ -48,6 +48,10 @@ export const getArticle = <T>(id: string) => {
   return request.get<T>(`/articles/${id}`).then((res) => res.data)
 }
 
+export const getCategorys = <T>() => {
+  return request.get<T>(`/categody`).then((res) => res.data)
+}
+
 export const removeArticle = (id: string) => {
   return request.delete(`/articles/${id}`).then((res) => res.data)
 }

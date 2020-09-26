@@ -61,6 +61,7 @@ export default function Create(): ReactElement {
   const router = useRouter()
   const { id } = router.query
   const [data, setArticle] = useState<Article>({
+    readedCount: 1,
     title: '',
     content: '',
   })
@@ -144,9 +145,8 @@ export default function Create(): ReactElement {
 
   const onScroll = useCallback((value: CodeMirror.ScrollInfo) => {
     if (previewRef.current) {
-      previewRef.current.scrollTop = Math.round(
-        previewRef.current.scrollHeight * (value.top / value.height)
-      )
+      previewRef.current.scrollTop =
+        (previewRef.current.scrollHeight + 40) * (value.top / value.height)
     }
   }, [])
 

@@ -2,15 +2,14 @@ import { Card, Divider, Tag } from 'antd'
 import Link from 'next/link'
 import React, { ReactElement } from 'react'
 import { color } from '@/utils'
-import { Article, Tag as ITag } from '@/types'
+import { Tag as ITag } from '@/types'
 import '@/styles/sider.less'
 
 interface Props {
-  articles: Article[]
   tags: ITag[]
 }
 
-export default function PageSiler({ tags, articles }: Props): ReactElement {
+export default function PageSiler({ tags }: Props): ReactElement {
   return (
     <div className="sider-container">
       <div className="admin-info">
@@ -22,31 +21,18 @@ export default function PageSiler({ tags, articles }: Props): ReactElement {
           Opportunities are always open to those who prepared for it.
         </p>
       </div>
-      <div className="recent-article">
-        <Card bordered={false}>
-          <Divider orientation="left">最近文章</Divider>
-          <ul className="recent-list">
-            {articles.map((v) => (
-              <li key={v.id}>
-                <Link href="/post/:id" as={`/post/${v.id}`}>
-                  {v.title}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </Card>
-      </div>
       <div className="tags-wrapper">
         <Card bordered={false}>
           <Divider orientation="left">标签</Divider>
           <div className="tags-content">
             {tags.map((v) => (
-              <Tag
-                key={v.id}
-                color={color[Math.floor(Math.random() * color.length)]}
-              >
-                {v.name}
-              </Tag>
+              <Link key={v.id} href="/archive" as={`/archive?tag=${v.name}`}>
+                <a>
+                  <Tag color={color[Math.floor(Math.random() * color.length)]}>
+                    {v.name}
+                  </Tag>
+                </a>
+              </Link>
             ))}
           </div>
         </Card>
