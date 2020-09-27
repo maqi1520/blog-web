@@ -1,6 +1,6 @@
-const withLess = require('@zeit/next-less')
 const fs = require('fs')
 const path = require('path')
+const withLess = require('@zeit/next-less')
 
 const rewrites = [
   {
@@ -22,7 +22,7 @@ const themeVariables = {
 
 if (process.env.NODE_ENV !== 'production') {
   const lessToJS = require('less-vars-to-js')
-  lessToJS(
+  themeVariables = lessToJS(
     fs.readFileSync(
       path.resolve(__dirname, './src/styles/antd-custom.less'),
       'utf8'
