@@ -74,10 +74,7 @@ export const ArcitleItem = memo(({ item }: Props) => {
     >
       <Link href="/post/[id]" as={`/post/${item.id}`}>
         <a>
-          <List.Item.Meta
-            title={item.title}
-            description={item.summary || '123'}
-          />
+          <List.Item.Meta title={item.title} description={item.summary} />
         </a>
       </Link>
     </List.Item>

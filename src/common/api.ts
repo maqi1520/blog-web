@@ -49,7 +49,7 @@ export const getArticle = <T>(id: string) => {
 }
 
 export const getCategorys = <T>() => {
-  return request.get<T>(`/categody`).then((res) => res.data)
+  return request.get<T>(`/category`).then((res) => res.data)
 }
 
 export const removeArticle = (id: string) => {

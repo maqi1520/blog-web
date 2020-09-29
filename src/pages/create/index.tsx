@@ -5,7 +5,7 @@ import React, {
   useRef,
   useEffect,
 } from 'react'
-import { Button, Input, Divider, message, Row, Col } from 'antd'
+import { Button, Input, Divider, message, Row, Col, Popover } from 'antd'
 import CodeMirror from 'codemirror'
 import {
   MinusOutlined,
@@ -24,6 +24,10 @@ import {
   RetweetOutlined,
   TableOutlined,
   LeftOutlined,
+  EyeOutlined,
+  EyeInvisibleOutlined,
+  EllipsisOutlined,
+  SaveOutlined,
 } from '@ant-design/icons'
 import api, { getArticle } from '@/common/api'
 import IconButton from '@/components/IconButton'
@@ -34,6 +38,7 @@ import Link from 'next/link'
 import { markdownToHtml } from '@/common/markdown'
 import { Article } from '@/types'
 import { OnRef } from '@/components/codemirror'
+import TagPanel from '@/components/TagPanel'
 import Head from 'next/head'
 import { BLOG_NAME } from '@/common/config'
 
@@ -139,6 +144,14 @@ export default function Create(): ReactElement {
     setArticle((prev) => ({ ...prev, title }))
   }, [])
 
+  const setCategories = useCallback((categories) => {
+    setArticle((prev) => ({ ...prev, categories }))
+  }, [])
+
+  const setSummary = useCallback((summary) => {
+    setArticle((prev) => ({ ...prev, summary }))
+  }, [])
+
   const onEditorRef = useCallback((v: OnRef) => {
     editorRef.current = v
   }, [])
@@ -168,6 +181,17 @@ export default function Create(): ReactElement {
     }
   }, [router, data])
 
+  const popContent = (
+    <div>
+      <Input.TextArea
+        rows={5}
+        value={data.summary}
+        onChange={(e) => setSummary(e.target.value)}
+      />
+      <TagPanel selectedTags={data.categories} onChange={setCategories} />
+    </div>
+  )
+
   return (
     <Auth>
       <div className="create-page">
@@ -188,14 +212,20 @@ export default function Create(): ReactElement {
             />
           </div>
           <div className="header-action">
-            <Button
-              style={{ marginRight: 20 }}
-              onClick={() => setEditable(!editable)}
-              type="default"
+            <Popover
+              placement="bottomRight"
+              trigger="click"
+              content={popContent}
             >
-              预览
-            </Button>
+              <Button
+                icon={<EllipsisOutlined />}
+                style={{ marginRight: 20 }}
+                type="default"
+              ></Button>
+            </Popover>
+
             <Button
+              icon={<SaveOutlined />}
               onClick={handleSave}
               style={{ marginRight: 20 }}
               type="primary"
@@ -292,6 +322,11 @@ export default function Create(): ReactElement {
                 icon={<MinusOutlined />}
                 onClick={insertDivider}
               />
+              <IconButton
+                title="预览"
+                icon={editable ? <EyeOutlined /> : <EyeInvisibleOutlined />}
+                onClick={() => setEditable(!editable)}
+              />
             </div>
           </div>
           <Row style={{ padding: 16 }} gutter={16}>
@@ -313,11 +348,11 @@ export default function Create(): ReactElement {
               {editable && (
                 <div
                   ref={previewRef}
-                  style={{ height }}
-                  className="create-content markdown-preview"
+                  className=" create-content markdown-preview"
                   dangerouslySetInnerHTML={{
                     __html: markdownToHtml(data.content || ''),
                   }}
+                  style={{ height }}
                 ></div>
               )}
             </Col>

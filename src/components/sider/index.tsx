@@ -25,14 +25,12 @@ export default function PageSiler({ tags }: Props): ReactElement {
         <Card bordered={false}>
           <Divider orientation="left">标签</Divider>
           <div className="tags-content">
-            {tags.map((v) => (
-              <Link key={v.id} href="/archive" as={`/archive?tag=${v.name}`}>
-                <a>
-                  <Tag color={color[Math.floor(Math.random() * color.length)]}>
-                    {v.name}
-                  </Tag>
-                </a>
-              </Link>
+            {tags.map((v, index) => (
+              <Tag key={v.id} color={color[index % 11]}>
+                <Link href="/archive" as={`/archive?tag=${v.name}`}>
+                  <a>{v.name}</a>
+                </Link>
+              </Tag>
             ))}
           </div>
         </Card>

@@ -1,9 +1,9 @@
-import { getArticles } from '@/lib/api'
+import { getArticles, getCategorys } from '@/lib/api'
 import { List, Col, Row } from 'antd'
 import { useRouter } from 'next/router'
 import React, { ReactElement } from 'react'
 import Sider from '@/components/sider'
-import { Tag as ITag, IArticleList } from '@/types'
+import { Tag as ITag, IArticleList, TagList } from '@/types'
 import { GetServerSideProps } from 'next'
 import Link from 'next/link'
 import Head from 'next/head'
@@ -69,11 +69,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     pageNum: pageNum as string,
     pageSize: '10',
   })
+  const category = await getCategorys<TagList>()
   return {
     props: {
       articleData,
-      articles: [],
-      tags: [],
+      tags: category.data,
     },
   }
 }

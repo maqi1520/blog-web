@@ -11,6 +11,15 @@ export const getArticles = <T>(params?: {
     .then((res) => res.data)
 }
 
+export const getCategorys = <T>(params?: {
+  pageNum?: string
+  pageSize?: string
+}) => {
+  return axios
+    .get<T>(process.env.API_URL + '/api/category', { params })
+    .then((res) => res.data)
+}
+
 export const getStars = <T>(params?: {
   pageNum?: string
   pageSize?: string

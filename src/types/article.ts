@@ -1,17 +1,12 @@
 import { List } from './base'
-
-interface Icategory {
-  id: string
-  name: string
-}
+import { Tag } from './tags'
 
 export interface Article {
-  categories?: Icategory[]
+  categories?: Tag[]
   title: string
   readedCount: number
   id?: string
   userId?: number
-  tag?: []
   summary?: string
   createdAt?: string
   content: string

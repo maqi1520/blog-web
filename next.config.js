@@ -13,7 +13,7 @@ const rewrites = [
   },
 ]
 
-const themeVariables = {
+let themeVariables = {
   '@primary-color': '#07c160',
   '@layout-header-background': '#fff',
   '@layout-header-height': '64px',

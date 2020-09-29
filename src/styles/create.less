@@ -1,3 +1,5 @@
+@import './antd-custom.less';
+
 .create-page {
   min-height: 100vh;
   display: flex;
@@ -93,4 +95,11 @@
   color: #595959;
   outline: none;
   line-height: 32px;
+}
+.category-list {
+  .ant-tag-checkable-checked {
+    border-color: transparent;
+    color: #fff;
+    background-color: @primary-color;
+  }
 }
