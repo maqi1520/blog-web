@@ -31,7 +31,7 @@ export default function Page({ starData: res }: Props): ReactElement {
   return (
     <>
       <Head>
-        <title>{BLOG_NAME}</title>
+        <title>文章收藏-{BLOG_NAME}</title>
       </Head>
       <List
         className="star-list"

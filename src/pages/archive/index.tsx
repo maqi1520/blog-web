@@ -16,7 +16,7 @@ export default function index({ articleData: res }: Props): ReactElement {
   return (
     <Card bordered={false}>
       <Head>
-        <title>{BLOG_NAME}</title>
+        <title>归档-{BLOG_NAME}</title>
       </Head>
       <Timeline>
         {res.data.map((v, i) => {

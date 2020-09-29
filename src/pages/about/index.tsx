@@ -10,7 +10,7 @@ class About extends Component {
     return (
       <Card bordered={false}>
         <Head>
-          <title>{BLOG_NAME}</title>
+          <title>关于-{BLOG_NAME}</title>
         </Head>
         <div className="content-inner-wrapper about">
           <Divider orientation="left">Blog</Divider>

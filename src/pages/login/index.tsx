@@ -3,6 +3,8 @@ import { LockOutlined, MailOutlined } from '@ant-design/icons'
 import { login } from '@/common/api'
 import React, { ReactElement, useContext } from 'react'
 import { useRouter } from 'next/router'
+import Head from 'next/head'
+import { BLOG_NAME } from '@/common/config'
 
 import { Context, IContext } from '@/components/layout/LayoutProvider'
 
@@ -26,6 +28,9 @@ export default function LoginPage(): ReactElement {
   }
   return (
     <div className="login">
+      <Head>
+        <title>登录-{BLOG_NAME}</title>
+      </Head>
       <Card bordered={false} className="login-form" style={{ width: 360 }}>
         <h1>Login</h1>
         <Form
