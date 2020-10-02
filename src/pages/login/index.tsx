@@ -19,8 +19,10 @@ export default function LoginPage(): ReactElement {
       const { token } = res
       if (token) {
         sessionStorage.setItem('token', token)
-        action.getUser()
-        router.push('/')
+        setTimeout(() => {
+          action.getUser()
+          router.push('/')
+        }, 0)
       }
     } catch (err) {
       message.error(err.message)

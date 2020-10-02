@@ -1,5 +1,5 @@
 import React, { ReactElement, useContext } from 'react'
-import { Result, Button } from 'antd'
+import { Result, Button, Spin } from 'antd'
 import Link from 'next/link'
 
 import { Context, IContext } from '@/components/layout/LayoutProvider'
@@ -10,6 +10,13 @@ interface Props {
 
 export default function Auth({ children }: Props): ReactElement {
   const [state] = useContext(Context) as IContext
+  if (state.loading) {
+    return (
+      <Spin>
+        <div style={{ height: '100vh' }} />
+      </Spin>
+    )
+  }
   if (state.user) {
     return children
   }

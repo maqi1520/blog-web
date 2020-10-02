@@ -78,17 +78,23 @@ export default function PageHeader(): ReactElement {
             </Menu>
           </Col>
           <Col lg={{ span: 3 }} md={{ span: 3 }} xs={{ span: 0 }}>
-            {state.user ? (
-              <Link href="/create">
-                <Button shape="circle" icon={<PlusOutlined />} type="primary" />
-              </Link>
-            ) : (
-              <Link href="/login">
-                <Button size="small" type="primary">
-                  登录
-                </Button>
-              </Link>
-            )}
+            {state.loading === false ? (
+              state.user ? (
+                <Link href="/create">
+                  <Button
+                    shape="circle"
+                    icon={<PlusOutlined />}
+                    type="primary"
+                  />
+                </Link>
+              ) : (
+                <Link href="/login">
+                  <Button size="small" type="primary">
+                    登录
+                  </Button>
+                </Link>
+              )
+            ) : null}
           </Col>
         </Row>
       </div>

@@ -1,25 +1,32 @@
 import { getUserInfo } from '@/common/api'
 import { User } from '@/types/base'
-import React, { createContext, ReactElement, useMemo, useState } from 'react'
+import React, {
+  createContext,
+  ReactElement,
+  useMemo,
+  useState,
+  useEffect,
+} from 'react'
 
 interface Props {
-  user: User
   children: ReactElement
 }
 
 interface Action {
   getUser: () => void
 }
-export type IContext = [{ user: User | null }, Action]
+interface State {
+  user: User | null
+  loading: boolean
+}
+export type IContext = [State, Action]
 
 export const Context = createContext<IContext | null>(null)
 
-export default function LayoutProvider({
-  children,
-  user,
-}: Props): ReactElement {
-  const [state, setstate] = useState<{ user: User | null }>({
-    user,
+export default function LayoutProvider({ children }: Props): ReactElement {
+  const [state, setstate] = useState<State>({
+    user: null,
+    loading: true,
   })
 
   const action = useMemo(
@@ -28,13 +35,18 @@ export default function LayoutProvider({
         if (window.sessionStorage.getItem('token')) {
           getUserInfo<User>()
             .then((res) => {
-              setstate({ user: res })
+              setstate({ user: res, loading: false })
             })
             .catch(() => {})
+        } else {
+          setstate({ user: null, loading: false })
         }
       },
     }),
     []
   )
+  useEffect(() => {
+    action.getUser()
+  }, [action])
   return <Context.Provider value={[state, action]}>{children}</Context.Provider>
 }

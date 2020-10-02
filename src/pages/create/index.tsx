@@ -33,6 +33,7 @@ import api, { getArticle } from '@/common/api'
 import IconButton from '@/components/IconButton'
 import Auth from '@/components/layout/Auth'
 import { useRouter } from 'next/router'
+import { GetServerSideProps } from 'next'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { markdownToHtml } from '@/common/markdown'
@@ -62,9 +63,8 @@ const LINK = (t: string) => `[${t || '链接'}](地址)`
 const IMAGE = (t: string) => `[${t || '链接'}](地址)`
 const DIVIDER = () => '---'
 
-export default function Create(): ReactElement {
+export default function Create({ id }: { id: string }): ReactElement {
   const router = useRouter()
-  const { id } = router.query
   const [data, setArticle] = useState<Article>({
     readedCount: 1,
     title: '',
@@ -159,7 +159,8 @@ export default function Create(): ReactElement {
   const onScroll = useCallback((value: CodeMirror.ScrollInfo) => {
     if (previewRef.current) {
       previewRef.current.scrollTop =
-        (previewRef.current.scrollHeight + 40) * (value.top / value.height)
+        (previewRef.current.scrollHeight - previewRef.current.clientHeight) *
+        (value.top / (value.height - value.clientHeight))
     }
   }, [])
 
@@ -331,10 +332,7 @@ export default function Create(): ReactElement {
           </div>
           <Row style={{ padding: 16 }} gutter={16}>
             <Col span={editable ? 12 : 24}>
-              <div
-                style={{ height, paddingRight: 0 }}
-                className="create-content"
-              >
+              <div style={{ height, padding: 0 }} className="create-content">
                 <Codemirror
                   onRef={onEditorRef}
                   className="markdown-editor"
@@ -361,4 +359,13 @@ export default function Create(): ReactElement {
       </div>
     </Auth>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { id } = ctx.query
+  return {
+    props: {
+      id,
+    },
+  }
 }

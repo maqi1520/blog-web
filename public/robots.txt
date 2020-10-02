@@ -1,5 +1,4 @@
 User-agent: *
-Request-rate: 1/1
 Crawl-delay: 5
 
 Disallow: /create
