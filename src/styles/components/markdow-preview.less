@@ -79,10 +79,6 @@
     list-style-type: lower-alpha;
   }
 
-  code {
-    border-radius: 4px;
-  }
-
   pre,
   pre[class*='language-'] {
     margin-top: 0 !important;
@@ -135,9 +131,17 @@
     border-top: 1px solid @border-color;
     overflow: hidden;
   }
+  :not(pre) {
+    > code {
+      padding: 0 3px;
+      color: @primary-color;
+      background-color: #f2f2f2;
+    }
+  }
   pre {
     overflow: initial;
-    code.hljs {
+    > code.hljs {
+      border-radius: 4px;
       font-size: 0.8em;
       padding: 0.5em 1em;
     }

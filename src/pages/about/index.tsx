@@ -51,7 +51,7 @@ class About extends Component {
                 target="_blank"
                 className="link"
                 rel="noreferrer noopener"
-                href="https://github.com/maqi520"
+                href="https://github.com/maqi1520"
               >
                 github
               </a>
@@ -60,14 +60,14 @@ class About extends Component {
               联系方式：
               <Divider type="vertical" />
               <i className="iconfont icon-email" />
-              <a href="mailto:164377467@qq.com">164377467@qq.com</a>
+              <a href="mailto:maqi1520@163.com">maqi1520@163.com</a>
             </li>
             <li>坐标：杭州</li>
             <li>学历专业：本科</li>
             <li>
               skill：
               <ul>
-                <li>前端：Vue、React、ES6/7/8、Echats、Axios</li>
+                <li>前端：React、ES6/7/8、antd、Axios</li>
                 <li>服务端：Node、Koa2、typeorm</li>
                 <li>数据库：Mysql</li>
                 <li>其他：webpack、git、typescript、serverless</li>

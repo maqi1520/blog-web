@@ -5,6 +5,7 @@ import axios from 'axios'
 export const getArticles = <T>(params?: {
   pageNum?: string
   pageSize?: string
+  tag?: string
 }) => {
   return axios
     .get<T>(process.env.API_URL + '/api/articles', { params })

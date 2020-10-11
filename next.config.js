@@ -8,6 +8,10 @@ const rewrites = [
     destination: `/?pageNum=:path*`,
   },
   {
+    source: '/archive/tag/:path*',
+    destination: `/archive?tag=:path*`,
+  },
+  {
     source: '/post/:id/edit',
     destination: `/create`,
   },

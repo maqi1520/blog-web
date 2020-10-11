@@ -27,7 +27,7 @@ export default function PageSiler({ tags }: Props): ReactElement {
           <div className="tags-content">
             {tags.map((v, index) => (
               <Tag key={v.id} color={color[index % 11]}>
-                <Link href="/archive" as={`/archive?tag=${v.name}`}>
+                <Link href="/archive" as={`/archive/tag/${v.name}`}>
                   <a>{v.name}</a>
                 </Link>
               </Tag>
