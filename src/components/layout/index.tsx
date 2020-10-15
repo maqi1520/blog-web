@@ -11,7 +11,11 @@ interface Props {
 }
 export default function PageLayout({ children }: Props) {
   const router = useRouter()
-  if (router.pathname === '/login' || router.pathname === '/create') {
+  if (
+    router.pathname === '/login' ||
+    router.pathname === '/create' ||
+    router.pathname === '/gallery'
+  ) {
     return children
   }
   return (

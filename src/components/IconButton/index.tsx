@@ -5,7 +5,7 @@ interface Props {
   title: string
   icon: ReactElement
   style?: CSSProperties
-  onClick: () => void
+  onClick?: () => void
 }
 
 export default function IconButton({

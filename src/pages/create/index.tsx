@@ -4,6 +4,7 @@ import React, {
   useCallback,
   useRef,
   useEffect,
+  useContext,
 } from 'react'
 import { Button, Input, Divider, message, Row, Col, Popover } from 'antd'
 import CodeMirror from 'codemirror'
@@ -39,6 +40,7 @@ import Link from 'next/link'
 import { markdownToHtml } from '@/common/markdown'
 import { Article } from '@/types'
 import { OnRef } from '@/components/codemirror'
+import { OSSFile } from '@/components/oss-gallery'
 import TagPanel from '@/components/TagPanel'
 import Head from 'next/head'
 import { BLOG_NAME } from '@/common/config'
@@ -46,6 +48,12 @@ import { BLOG_NAME } from '@/common/config'
 const Codemirror = dynamic(() => import('@/components/codemirror'), {
   ssr: false,
 })
+const OssGallery = dynamic(() => import('@/components/oss-gallery'), {
+  ssr: false,
+})
+
+import { Context, IContext } from '@/components/layout/LayoutProvider'
+
 //const Markdown = dynamic(() => import('@/components/markdown'), { ssr: false })
 
 // 插入内容
@@ -60,10 +68,10 @@ const QUOTE = (t: string) => `> ${t || '引用'}`
 const TABLE = () => `\n| | |\n|--|--|\n|  |  |`
 const CODE = (t: string) => '\n```\n' + (t || '代码') + '\n```'
 const LINK = (t: string) => `[${t || '链接'}](地址)`
-const IMAGE = (t: string) => `[${t || '链接'}](地址)`
 const DIVIDER = () => '---'
 
 export default function Create({ id }: { id: string }): ReactElement {
+  const [state] = useContext(Context) as IContext
   const router = useRouter()
   const [data, setArticle] = useState<Article>({
     readedCount: 1,
@@ -129,9 +137,15 @@ export default function Create({ id }: { id: string }): ReactElement {
   const insertLink = useCallback(() => {
     insertContent(LINK)
   }, [insertContent])
-  const insertImage = useCallback(() => {
-    insertContent(IMAGE)
-  }, [insertContent])
+  const insertImage = useCallback(
+    (changeCheckedList: OSSFile[]) => {
+      const str = changeCheckedList
+        .map((file) => `![${file.name}](${file.url})\n`)
+        .join('')
+      insertContent(str)
+    },
+    [insertContent]
+  )
 
   const insertDivider = useCallback(() => {
     insertContent(DIVIDER)
@@ -312,11 +326,13 @@ export default function Create({ id }: { id: string }): ReactElement {
                 icon={<LinkOutlined />}
                 onClick={insertLink}
               />
-              <IconButton
-                title="图片"
-                icon={<PictureOutlined />}
-                onClick={insertImage}
-              />
+              <OssGallery
+                prefixDir={state.user ? state.user.id + '/' : undefined}
+                onChange={insertImage}
+              >
+                <IconButton title="图片" icon={<PictureOutlined />} />
+              </OssGallery>
+
               <Divider type="vertical" />
               <IconButton
                 title="分割线"
@@ -362,7 +378,8 @@ export default function Create({ id }: { id: string }): ReactElement {
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { id } = ctx.query
+  const { id = null } = ctx.query
+
   return {
     props: {
       id,

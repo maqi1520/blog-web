@@ -3,8 +3,10 @@ import 'codemirror/mode/markdown/markdown'
 import 'codemirror/mode/xml/xml'
 import React, { Component, CSSProperties } from 'react'
 
+type FN = (text?: string) => string
+type StrOrFn = string | FN
 export interface OnRef {
-  insertText: (fn: (text?: string) => string) => void
+  insertText: (fn: StrOrFn) => void
   editor: CodeMirror.Editor
 }
 
@@ -66,22 +68,23 @@ export default class CodeMirrorEditor extends Component<Props, State> {
     }
   }
 
-  insertText = (fn: (text?: string) => string) => {
+  insertText = (fn: StrOrFn) => {
     if (!this.editor) {
       return
     }
-
     const editor = this.editor
     const sel = this.editor.getSelection()
     if (sel) {
-      const text = fn(sel)
+      const text = typeof fn == 'function' ? fn(sel) : fn
       editor.replaceSelection(text)
     } else {
+      const text = typeof fn == 'function' ? fn() : fn
       const form = this.editor.getCursor()
-      const text = fn()
       editor.replaceRange(text, form)
     }
-    editor.focus()
+    setTimeout(() => {
+      editor.focus()
+    }, 100)
   }
 
   componentDidUpdate() {
