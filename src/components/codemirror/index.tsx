@@ -2,6 +2,7 @@ import CodeMirror from 'codemirror'
 import 'codemirror/mode/markdown/markdown'
 import 'codemirror/mode/xml/xml'
 import React, { Component, CSSProperties } from 'react'
+import { putObject } from '../oss-gallery/oss'
 
 type FN = (text?: string) => string
 type StrOrFn = string | FN
@@ -21,6 +22,7 @@ interface Props {
   onScroll?: (value: CodeMirror.ScrollInfo) => void
   forceTextArea?: boolean
   value?: string
+  prefixDir?: string
 }
 interface State {
   isControlled: boolean
@@ -46,6 +48,7 @@ export default class CodeMirrorEditor extends Component<Props, State> {
   }
 
   componentDidMount() {
+    const { prefixDir = '' } = this.props
     const isTextArea = this.props.forceTextArea || IS_MOBILE
     if (!isTextArea && this.editorRef.current) {
       this.editor = CodeMirror.fromTextArea(this.editorRef.current, {
@@ -61,6 +64,26 @@ export default class CodeMirrorEditor extends Component<Props, State> {
           this.props.onScroll && this.props.onScroll(instance.getScrollInfo())
         })
       }
+      this.editor.on('paste', (instance: CodeMirror.Editor, e) => {
+        const file = e.clipboardData?.items[0].getAsFile()
+        if (file) {
+          const d = new Date()
+          const p =
+            prefixDir +
+            d.getFullYear() +
+            '/' +
+            (d.getMonth() + 1) +
+            '/' +
+            d.getDay() +
+            '/' +
+            d.getTime() +
+            '_'
+
+          putObject(p + file.name, file).then((res) => {
+            this.insertText(`![${file.name}](${res.url})`)
+          })
+        }
+      })
       this.props.onRef({
         editor: this.editor,
         insertText: this.insertText,

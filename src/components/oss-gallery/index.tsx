@@ -1,5 +1,5 @@
 import React, { ReactElement, useEffect, useState, useCallback } from 'react'
-import { list, putObject, deleteMulti } from './oss'
+import { list, multipartUpload, deleteMulti } from './oss'
 import { Button, Checkbox, Modal, Breadcrumb } from 'antd'
 import { CheckboxChangeEvent } from 'antd/es/checkbox/Checkbox'
 import { UploadOutlined, FolderOutlined, HomeOutlined } from '@ant-design/icons'
@@ -16,10 +16,11 @@ interface Props {
 }
 
 export default function OSSGallery({
-  prefixDir,
+  prefixDir = '',
   onChange,
   children,
 }: Props): ReactElement {
+  const [progress, setProgress] = useState(1)
   const [prefix, setPrefix] = useState<string | undefined>(prefixDir)
   const [visible, setVisible] = useState(false)
   const [checkedList, changeCheckedList] = useState<OSSFile[]>([])
@@ -49,14 +50,29 @@ export default function OSSGallery({
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const { files } = e.target
       const postFiles = Array.prototype.slice.call(files)
+      const d = new Date()
+      const p =
+        prefixDir +
+        d.getFullYear() +
+        '/' +
+        (d.getMonth() + 1) +
+        '/' +
+        d.getDay() +
+        '/'
 
       postFiles.forEach((file) => {
-        putObject(prefix + file.name, file).then(() => {
-          reload()
+        multipartUpload(p + file.name, file, (p) => {
+          setProgress(p)
+        }).then(() => {
+          if (prefix === p) {
+            reload()
+          } else {
+            setPrefix(p)
+          }
         })
       })
     },
-    [reload, prefix]
+    [reload, prefixDir, prefix]
   )
   const handleCheckChange = useCallback(
     (e: CheckboxChangeEvent, o) => {
@@ -79,6 +95,10 @@ export default function OSSGallery({
     changeCheckedList([])
     setVisible(false)
   }, [onChange, checkedList])
+  const handleShow = useCallback(() => {
+    setVisible(true)
+    reload()
+  }, [reload])
   //?x-oss-process=image/resize,m_mfit,w_200,h_200/quality,Q_90'
   const body = (
     <div className="oss-gallery">
@@ -105,7 +125,12 @@ export default function OSSGallery({
         </Breadcrumb>
       ) : null}
       <div className="clearfix mb">
-        <Button className="pull-left upload-button" type="ghost">
+        <Button
+          loading={progress < 1}
+          icon={<UploadOutlined />}
+          className="pull-left upload-button"
+          type="ghost"
+        >
           <input
             multiple
             accept="image/*"
@@ -113,8 +138,7 @@ export default function OSSGallery({
             className="upload-input"
             type="file"
           />
-          <UploadOutlined />
-          <span>选择文件</span>
+          选择文件
         </Button>
         <Button
           disabled={checkedList.length === 0}
@@ -127,7 +151,7 @@ export default function OSSGallery({
         </Button>
       </div>
 
-      <ul className=" clearfix">
+      <ul className="clearfix">
         {state.prefixes.map((p: string) => {
           const dirArr = p.split('/')
           return (
@@ -168,7 +192,7 @@ export default function OSSGallery({
   if (children) {
     return (
       <>
-        {React.cloneElement(children, { onClick: () => setVisible(true) })}
+        {React.cloneElement(children, { onClick: handleShow })}
         <Modal
           onOk={handleOk}
           onCancel={setVisible.bind(null, false)}

@@ -25,6 +25,22 @@ export async function list(dir?: string) {
   }
 }
 
+export async function multipartUpload(
+  fileName: string,
+  data: any,
+  progress: (p: number) => void
+) {
+  try {
+    // object-key可以自定义为文件名（例如file.txt）或目录（例如abc/test/file.txt）的形式，实现将文件上传至当前Bucket或Bucket下的指定目录。
+    const result = await client.multipartUpload(fileName, data, {
+      progress,
+    })
+    return result
+  } catch (e) {
+    console.log(e)
+  }
+}
+
 export async function putObject(fileName: string, data: any) {
   try {
     // object-key可以自定义为文件名（例如file.txt）或目录（例如abc/test/file.txt）的形式，实现将文件上传至当前Bucket或Bucket下的指定目录。

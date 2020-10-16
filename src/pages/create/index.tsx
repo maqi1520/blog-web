@@ -63,7 +63,7 @@ const ITALIC = (t: string) => `_${t || '斜体'}_`
 const STRIKETHROUGH = (t: string) => `~~${t || '删除线'}~~`
 const UNORDERED_LIST = (t: string) => `- ${t || '无序列表'}`
 const ORDERED_LIST = (t: string) => `1. ${t || '无序列表'}`
-const CHECK_LIST = (t: string) => `- [] ${t || '可选列表'}`
+const CHECK_LIST = (t: string) => `- [ ] ${t || '可选列表'}`
 const QUOTE = (t: string) => `> ${t || '引用'}`
 const TABLE = () => `\n| | |\n|--|--|\n|  |  |`
 const CODE = (t: string) => '\n```\n' + (t || '代码') + '\n```'
@@ -350,6 +350,7 @@ export default function Create({ id }: { id: string }): ReactElement {
             <Col span={editable ? 12 : 24}>
               <div style={{ height, padding: 0 }} className="create-content">
                 <Codemirror
+                  prefixDir={state.user ? state.user.id + '/' : undefined}
                   onRef={onEditorRef}
                   className="markdown-editor"
                   value={data.content || ''}
