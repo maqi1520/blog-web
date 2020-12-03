@@ -36,42 +36,38 @@ export const ArcitleItem = memo(({ item }: Props) => {
         message.error(err.message)
       })
   }, [item.id])
+  const actions = [
+    !item.published && <Tag color="orange">待发布</Tag>,
+    item.categories && (
+      <IconText
+        key="tag"
+        icon={<TagOutlined />}
+        text={item.categories.map((v, index) => (
+          <Tag key={index} color="green">
+            {v.name}
+          </Tag>
+        ))}
+      />
+    ),
+    <IconText key="time" icon={<CalendarOutlined />} text={item.createdAt} />,
+    <IconText
+      key="count"
+      icon={<EyeOutlined />}
+      text={`${item.readedCount} 次预览`}
+    />,
+    item.userId === userId ? (
+      <Popconfirm
+        key="del"
+        placement="top"
+        title={'确认删除？'}
+        onConfirm={handleRemove}
+      >
+        <DeleteOutlined />
+      </Popconfirm>
+    ) : undefined,
+  ].filter(Boolean)
   return (
-    <List.Item
-      actions={[
-        item.categories ? (
-          <IconText
-            key="tag"
-            icon={<TagOutlined />}
-            text={item.categories.map((v, index) => (
-              <Tag key={index} color="green">
-                {v.name}
-              </Tag>
-            ))}
-          />
-        ) : null,
-        <IconText
-          key="time"
-          icon={<CalendarOutlined />}
-          text={item.createdAt}
-        />,
-        <IconText
-          key="count"
-          icon={<EyeOutlined />}
-          text={`${item.readedCount} 次预览`}
-        />,
-        item.userId === userId ? (
-          <Popconfirm
-            key="del"
-            placement="top"
-            title={'确认删除？'}
-            onConfirm={handleRemove}
-          >
-            <DeleteOutlined />
-          </Popconfirm>
-        ) : undefined,
-      ]}
-    >
+    <List.Item actions={actions}>
       <Link href="/post/[id]" as={`/post/${item.id}`}>
         <a>
           <List.Item.Meta title={item.title} description={item.summary} />

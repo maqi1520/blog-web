@@ -36,7 +36,7 @@ export default function index({ articleData: res, tags }: Props): ReactElement {
                   >
                     <Link href="/post/:id" as={`/post/${v.id}`}>
                       <a>
-                        <span className="mr20">
+                        <span className="mr">
                           {(v.createdAt as string).slice(0, 10)}
                         </span>
                         <span>{v.title}</span>
@@ -57,6 +57,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { pageNum = '1', tag } = ctx.query
 
   const articleData = await getArticles({
+    published: true,
     pageNum: pageNum as string,
     pageSize: '1000',
     tag: tag as string,

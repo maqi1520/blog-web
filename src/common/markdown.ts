@@ -3,6 +3,10 @@ import html from 'remark-html'
 import slug from 'remark-slug'
 import toc from 'mdast-util-toc'
 import highlight from 'remark-highlight.js'
+import low from 'lowlight/lib/core'
+import javascript from 'highlight.js/lib/languages/javascript'
+
+low.registerLanguage('tsx', javascript)
 
 function mytoc() {
   return (tree: any) => {
@@ -36,6 +40,9 @@ export function markdownToHtml(markdown: string) {
       .processSync(markdown)
     return result.toString()
   } catch (error) {
-    return 'remark 编译 错误'
+    if (error && /Unknown language/.test(error.message)) {
+      return
+    }
+    throw error
   }
 }

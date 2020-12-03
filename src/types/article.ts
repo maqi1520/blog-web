@@ -2,6 +2,7 @@ import { List } from './base'
 import { Tag } from './tags'
 
 export interface Article {
+  published?: boolean
   categories?: Tag[]
   title: string
   readedCount: number

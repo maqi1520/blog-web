@@ -106,7 +106,7 @@
       color: #333;
       font-size: 14px;
       display: block;
-      padding: 8px 24px;
+      padding: 8px 16px;
       cursor: pointer;
       &:hover {
         color: @primary-color;
@@ -117,5 +117,24 @@
         font-size: 12px;
       }
     }
+  }
+}
+
+.comment {
+  list-style: none;
+  padding: 0;
+  .comment {
+    margin-left: 20px;
+    border-left: 2px solid #ececec;
+    padding: 0 0 0 20px;
+  }
+}
+.reply-info {
+  line-height: 32px;
+  border-radius: 2px;
+  padding: 5px 10px;
+  background-color: rgba(0, 0, 0, 0.1);
+  .ml10 {
+    margin-left: 10px;
   }
 }

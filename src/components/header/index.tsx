@@ -7,7 +7,7 @@ import {
   StarOutlined,
   TeamOutlined,
 } from '@ant-design/icons'
-import { Button, Col, Layout, Menu, Row } from 'antd'
+import { Button, Col, Layout, Menu, Row, Dropdown } from 'antd'
 import Link from 'next/link'
 import React, { ReactElement, useContext } from 'react'
 import '@/styles/header.less'
@@ -80,13 +80,35 @@ export default function PageHeader(): ReactElement {
           <Col lg={{ span: 3 }} md={{ span: 3 }} xs={{ span: 0 }}>
             {state.loading === false ? (
               state.user ? (
-                <Link href="/create">
+                <Dropdown
+                  arrow
+                  placement="bottomCenter"
+                  overlay={
+                    <Menu style={{ width: 120 }}>
+                      <Menu.Item icon={<HomeOutlined />}>
+                        <Link href="/user/[id]" as={`/user/${state.user.id}`}>
+                          <a>个人主页</a>
+                        </Link>
+                      </Menu.Item>
+                      <Menu.Item icon={<StarOutlined />}>
+                        <Link href="/create">
+                          <a>加收藏</a>
+                        </Link>
+                      </Menu.Item>
+                      <Menu.Item icon={<EditOutlined />}>
+                        <Link href="/create">
+                          <a>写文章</a>
+                        </Link>
+                      </Menu.Item>
+                    </Menu>
+                  }
+                >
                   <Button
                     shape="circle"
                     icon={<PlusOutlined />}
                     type="primary"
                   />
-                </Link>
+                </Dropdown>
               ) : (
                 <Link href="/login">
                   <Button size="small" type="primary">

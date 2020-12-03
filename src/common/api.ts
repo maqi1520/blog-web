@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from 'axios'
+import { Comment } from '@/types'
 
 const request = axios.create({
   baseURL: process.env.API_URL || '' + '/api',
@@ -48,10 +49,32 @@ export const getArticle = <T>(id: string) => {
   return request.get<T>(`/articles/${id}`).then((res) => res.data)
 }
 
+export const getArticles = <T>(params?: {
+  userId?: string
+  published?: boolean
+  pageNum?: string
+  pageSize?: string
+  tag?: string
+}) => {
+  return request
+    .get<T>('/articles', { params })
+    .then((res) => res.data)
+}
+
 export const getCategorys = <T>() => {
   return request.get<T>(`/category`).then((res) => res.data)
 }
 
 export const removeArticle = (id: string) => {
   return request.delete(`/articles/${id}`).then((res) => res.data)
+}
+
+export const getComments = <T>(articleId: string) => {
+  return request
+    .get<T>(`/comment`, { params: { articleId } })
+    .then((res) => res.data)
+}
+
+export const addComments = <T>(data: Comment) => {
+  return request.post<T>(`/comment`, data).then((res) => res.data)
 }

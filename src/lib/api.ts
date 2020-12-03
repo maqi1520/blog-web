@@ -3,6 +3,7 @@ import axios from 'axios'
 //========== node 接口 ====
 
 export const getArticles = <T>(params?: {
+  published?: boolean
   pageNum?: string
   pageSize?: string
   tag?: string
@@ -43,5 +44,11 @@ export const getUser = <T>(token: string) => {
         Authorization: `Bearer ${token}`,
       },
     })
+    .then((res) => res.data)
+}
+
+export const getUserById = <T>(id: string) => {
+  return axios
+    .get<T>(process.env.API_URL + `/api/users/${id}`)
     .then((res) => res.data)
 }

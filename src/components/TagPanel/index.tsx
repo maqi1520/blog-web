@@ -68,7 +68,6 @@ export default function CategoryPanel({
         ))}
       </div>
 
-      <Divider>添加标签</Divider>
       {inputVisible && (
         <Input
           ref={inputRef}

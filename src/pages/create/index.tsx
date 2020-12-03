@@ -6,7 +6,7 @@ import React, {
   useEffect,
   useContext,
 } from 'react'
-import { Button, Input, Divider, message, Row, Col, Popover } from 'antd'
+import { Button, Input, message, Row, Col, Popover, Divider } from 'antd'
 import CodeMirror from 'codemirror'
 import {
   MinusOutlined,
@@ -27,7 +27,8 @@ import {
   LeftOutlined,
   EyeOutlined,
   EyeInvisibleOutlined,
-  EllipsisOutlined,
+  PaperClipOutlined,
+  CloudUploadOutlined,
   SaveOutlined,
 } from '@ant-design/icons'
 import api, { getArticle } from '@/common/api'
@@ -178,32 +179,63 @@ export default function Create({ id }: { id: string }): ReactElement {
     }
   }, [])
 
-  const handleSave = useCallback(async () => {
-    try {
-      if (!data.id) {
-        const { data: res } = await api.post('/article', data)
-        if (res) {
-          router.push('/')
-        }
-      } else {
-        const { data: res } = await api.put(`/article/${data.id}`, data)
-        if (res) {
-          router.push('/')
-        }
+  const handleSave = useCallback(
+    async (published: boolean) => {
+      if (data.title.trim() === '') {
+        message.error('请输入标题')
+        return
       }
-    } catch (error) {
-      message.error(error.message)
-    }
-  }, [router, data])
+      try {
+        if (!data.id) {
+          const { data: res } = await api.post('/article', {
+            ...data,
+            published,
+          })
+          if (res) {
+            router.push('/')
+          }
+        } else {
+          const { data: res } = await api.put(`/article/${data.id}`, {
+            ...data,
+            published,
+          })
+          if (res) {
+            router.push('/')
+          }
+        }
+      } catch (error) {
+        message.error(error.message)
+      }
+    },
+    [router, data]
+  )
 
   const popContent = (
-    <div>
+    <div style={{ width: 300 }}>
       <Input.TextArea
-        rows={5}
+        placeholder="摘要"
+        rows={4}
         value={data.summary}
         onChange={(e) => setSummary(e.target.value)}
       />
       <TagPanel selectedTags={data.categories} onChange={setCategories} />
+      <Divider></Divider>
+      <div className="text-center">
+        <Button
+          icon={<PaperClipOutlined />}
+          onClick={() => handleSave(false)}
+          style={{ marginRight: 20 }}
+        >
+          保存草稿
+        </Button>
+        <Button
+          icon={<SaveOutlined />}
+          type="primary"
+          onClick={() => handleSave(true)}
+        >
+          确认发布
+        </Button>
+      </div>
     </div>
   )
 
@@ -232,21 +264,10 @@ export default function Create({ id }: { id: string }): ReactElement {
               trigger="click"
               content={popContent}
             >
-              <Button
-                icon={<EllipsisOutlined />}
-                style={{ marginRight: 20 }}
-                type="default"
-              ></Button>
+              <Button icon={<CloudUploadOutlined />} type="primary">
+                保存
+              </Button>
             </Popover>
-
-            <Button
-              icon={<SaveOutlined />}
-              onClick={handleSave}
-              style={{ marginRight: 20 }}
-              type="primary"
-            >
-              发布
-            </Button>
           </div>
         </div>
         <div className="create-body">
@@ -365,7 +386,7 @@ export default function Create({ id }: { id: string }): ReactElement {
                   ref={previewRef}
                   className=" create-content markdown-preview"
                   dangerouslySetInnerHTML={{
-                    __html: markdownToHtml(data.content || ''),
+                    __html: markdownToHtml(data.content || '') as string,
                   }}
                   style={{ height }}
                 ></div>

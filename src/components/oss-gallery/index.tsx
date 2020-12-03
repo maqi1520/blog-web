@@ -33,14 +33,18 @@ export default function OSSGallery({
 
   const reload = useCallback(() => {
     changeCheckedList([])
-    list(prefix).then((res) => {
-      setstate({
-        isTruncated: res.isTruncated,
-        nextMarker: res.nextMarker,
-        objects: res.objects || [],
-        prefixes: res.prefixes || [],
+    list(prefix)
+      .then((res) => {
+        setstate({
+          isTruncated: res.isTruncated,
+          nextMarker: res.nextMarker,
+          objects: res.objects || [],
+          prefixes: res.prefixes || [],
+        })
       })
-    })
+      .catch((err) => {
+        console.log(err)
+      })
   }, [prefix])
   useEffect(() => {
     reload()
@@ -63,13 +67,17 @@ export default function OSSGallery({
       postFiles.forEach((file) => {
         multipartUpload(p + file.name, file, (p) => {
           setProgress(p)
-        }).then(() => {
-          if (prefix === p) {
-            reload()
-          } else {
-            setPrefix(p)
-          }
         })
+          .then(() => {
+            if (prefix === p) {
+              reload()
+            } else {
+              setPrefix(p)
+            }
+          })
+          .catch((err) => {
+            console.log(err)
+          })
       })
     },
     [reload, prefixDir, prefix]
@@ -86,9 +94,13 @@ export default function OSSGallery({
   )
   const handleDelete = useCallback(() => {
     changeCheckedList([])
-    deleteMulti(checkedList.map((c) => c.name)).then(() => {
-      reload()
-    })
+    deleteMulti(checkedList.map((c) => c.name))
+      .then(() => {
+        reload()
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }, [checkedList, reload])
   const handleOk = useCallback(() => {
     onChange && onChange(checkedList)

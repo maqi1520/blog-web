@@ -7,6 +7,7 @@ import { getArticle, getArticles } from '@/lib/api'
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import { BLOG_NAME } from '@/common/config'
+import Comment from '@/components/comment'
 import Link from 'next/link'
 import { Context, IContext } from '@/components/layout/LayoutProvider'
 import '@/styles/post.less'
@@ -102,9 +103,12 @@ export default function ArticleDetail({
 
           <div
             className="markdown-preview"
-            dangerouslySetInnerHTML={{ __html: markdownToHtml(data.content) }}
+            dangerouslySetInnerHTML={{
+              __html: markdownToHtml(data.content) as string,
+            }}
           ></div>
         </Card>
+        <Comment articleId={data?.id as string}></Comment>
       </Col>
 
       <Col xs={{ span: 0 }} md={{ span: 6 }}>
@@ -152,6 +156,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   try {
     const res = await getArticles<IArticleList>({
+      published: true,
       pageNum: '1',
       pageSize: '10',
     })
