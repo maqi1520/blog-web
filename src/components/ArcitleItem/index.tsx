@@ -76,7 +76,7 @@ export const ArcitleItem = memo(({ item }: Props) => {
   ].filter(Boolean)
   return (
     <List.Item actions={actions}>
-      <Link href="/post/[id]/edit" as={`/post/${item.id}/edit`}>
+      <Link href="/post/[id]" as={`/post/${item.id}`}>
         <a>
           <List.Item.Meta title={item.title} description={item.summary} />
         </a>

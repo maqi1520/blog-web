@@ -54,7 +54,12 @@ export default function UserArticle(): ReactElement {
     return (
       <Link
         as={`/user/${userId}/article?pageNum=${current}`}
-        href={`/user/[id]/article?pageNum=${current}`}
+        href={{
+          pathname: '/user/[id]/article',
+          query: {
+            pageNum: current,
+          },
+        }}
       >
         {originalElement}
       </Link>
