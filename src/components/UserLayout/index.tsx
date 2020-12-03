@@ -13,11 +13,11 @@ export default function UserLayout({ children }: Props): ReactElement {
   const { id } = router.query
   return (
     <div>
-      <Menu mode="horizontal" selectedKeys={[router.asPath]}>
-        <Menu.Item key={`/user/${id}`}>
+      <Menu mode="horizontal" selectedKeys={[router.route]}>
+        <Menu.Item key={`/user/[id]`}>
           <Link href={`/user/${id}`}>个人资料</Link>
         </Menu.Item>
-        <Menu.Item key={`/user/${id}/article`}>
+        <Menu.Item key={`/user/[id]/article`}>
           <Link href={`/user/${id}/article`}>文章</Link>
         </Menu.Item>
       </Menu>

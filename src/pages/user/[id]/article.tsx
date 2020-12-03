@@ -53,8 +53,8 @@ export default function UserArticle(): ReactElement {
   ) => {
     return (
       <Link
-        as={`/user/${userId}/article`}
-        href={`/user/${userId}/article?pageNum=${current}`}
+        as={`/user/${userId}/article?pageNum=${current}`}
+        href={`/user/[id]/article?pageNum=${current}`}
       >
         {originalElement}
       </Link>

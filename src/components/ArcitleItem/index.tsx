@@ -3,8 +3,9 @@ import {
   EyeOutlined,
   TagOutlined,
   DeleteOutlined,
+  EditOutlined,
 } from '@ant-design/icons'
-import { List, message, Tag, Popconfirm } from 'antd'
+import { List, message, Tag, Popconfirm, Tooltip } from 'antd'
 import React, { useCallback, memo, ReactElement, useContext } from 'react'
 import Link from 'next/link'
 import { Article } from '@/types'
@@ -55,20 +56,27 @@ export const ArcitleItem = memo(({ item }: Props) => {
       icon={<EyeOutlined />}
       text={`${item.readedCount} 次预览`}
     />,
-    item.userId === userId ? (
-      <Popconfirm
-        key="del"
-        placement="top"
-        title={'确认删除？'}
-        onConfirm={handleRemove}
-      >
-        <DeleteOutlined />
-      </Popconfirm>
-    ) : undefined,
+    item.userId === userId && (
+      <span key="option">
+        <Tooltip title="编辑">
+          <Link href="/post/[id]/edit" as={`/post/${item.id}/edit`}>
+            <EditOutlined />
+          </Link>
+        </Tooltip>
+
+        <Popconfirm
+          placement="top"
+          title={'确认删除？'}
+          onConfirm={handleRemove}
+        >
+          <DeleteOutlined style={{ marginLeft: 10 }} />
+        </Popconfirm>
+      </span>
+    ),
   ].filter(Boolean)
   return (
     <List.Item actions={actions}>
-      <Link href="/post/[id]" as={`/post/${item.id}`}>
+      <Link href="/post/[id]/edit" as={`/post/${item.id}/edit`}>
         <a>
           <List.Item.Meta title={item.title} description={item.summary} />
         </a>

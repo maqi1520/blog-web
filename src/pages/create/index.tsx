@@ -192,7 +192,7 @@ export default function Create({ id }: { id: string }): ReactElement {
             published,
           })
           if (res) {
-            router.push('/')
+            router.back()
           }
         } else {
           const { data: res } = await api.put(`/article/${data.id}`, {
@@ -200,7 +200,7 @@ export default function Create({ id }: { id: string }): ReactElement {
             published,
           })
           if (res) {
-            router.push('/')
+            router.back()
           }
         }
       } catch (error) {
